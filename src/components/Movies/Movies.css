@@ -1,0 +1,21 @@
+.movies {
+  margin: auto;
+  box-sizing: border-box;
+  max-width: 1280px;
+  padding: 70px clamp(3.125rem, 1.25rem + 3.9063vw, 4.375rem) 80px;
+}
+
+@media screen and (max-width: 992px) {
+  .movies {
+    padding: 80px clamp(0.875rem, 0.1607rem + 3.5714vw, 1.875rem) 100px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .movies {
+    padding: 84px 10px 160px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+}

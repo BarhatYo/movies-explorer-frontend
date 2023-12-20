@@ -1,0 +1,55 @@
+.profile-button {
+  width: 100px;
+  height: 32px;
+  background-color: #fff;
+  box-shadow: 0px 3px 14px 0px rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  border-radius: 40px;
+  justify-content: space-between;
+  border: none;
+  padding: 0;
+  text-decoration: none;
+}
+
+.profile-button__username {
+  font-size: 13px;
+  color: #000;
+  margin: 0;
+  padding-left: 11px;
+}
+
+.profile-button__icon {
+  display: flex;
+  width: 26px;
+  height: 26px;
+  background-color: #f9f9f9;
+  border-radius: 50px;
+  background-image: url("../../images/icon__COLOR_icon-main.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  padding-right: 11px;
+}
+
+.profile-button__main-page {
+  background-color: transparent;
+}
+
+@media screen and (max-width: 768px) {
+  .profile-button {
+    margin-bottom: 90px;
+    margin-top: auto;
+    display: none;
+  }
+
+  .profile-button_active {
+    display: flex;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .profile-button {
+    margin-bottom: 46px;
+    margin-top: auto;
+  }
+}
