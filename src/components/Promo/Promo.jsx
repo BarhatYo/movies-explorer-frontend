@@ -1,10 +1,10 @@
 import React from "react";
 import "./Promo.css";
-import promoLogo from "../../images/promo-logo.png";
+import promoLogo from "../../images/promo-logo.svg";
 
 export default function Promo() {
   return (
-    <div className="promo">
+    <section className="promo">
       <div className="promo__content">
         <div className="promo__info">
           <div className="promo__text">
@@ -20,6 +20,7 @@ export default function Promo() {
         </div>
         <button
           className="promo__more"
+          type="button"
           onClick={(e) => {
             e.preventDefault();
             const aboutElement = document.querySelector(".about");
@@ -29,6 +30,6 @@ export default function Promo() {
           Узнать больше
         </button>
       </div>
-    </div>
+    </section>
   );
 }

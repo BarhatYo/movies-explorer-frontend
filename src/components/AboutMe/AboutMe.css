@@ -37,7 +37,7 @@
 }
 
 .about-me__github-link:hover {
-  color: rgba(0, 0, 0, 0.8);
+  color: rgba(0, 0, 0, 0.7);
 }
 
 .about-me__avatar {
@@ -48,7 +48,7 @@
 .about-me__portfolio {
   display: flex;
   flex-direction: column;
-  gap: 27px;
+  gap: 26px;
 }
 
 .about-me__portfolio-title {
@@ -59,10 +59,27 @@
   margin: 0;
 }
 
+.about-me__portfolio-items {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 27px;
+  margin: 0;
+}
+
 .about-me__portfolio-item {
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.about-me__portfolio-item:hover {
+  opacity: 0.7;
+}
+
+.about-me__portfolio-item-link {
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid #e8e8e8;
+  text-decoration: none;
 }
 
 .about-me__portfolio-item:last-child {
@@ -75,13 +92,14 @@
   letter-spacing: -0.04em;
   color: #000;
   text-decoration: none;
-  margin-bottom: 25px;
+  margin: 0 0 25px;
 }
 
 .about-me__portfolio-icon {
-  display: flex;
-  align-items: center;
-  margin-bottom: 19px;
+  width: 18px;
+  height: 17px;
+  margin: 10px 0 19px;
+  padding-right: 6px;
 }
 
 .about-me__portfolio-img {
@@ -104,11 +122,15 @@
 
   .about-me__profession {
     font-size: 12px;
-    margin: 10px 0 20px;
+    margin: 7px 0 20px;
   }
 
   .about-me__portfolio-title {
     padding-bottom: 28px;
+  }
+
+  .about-me__portfolio-items {
+    gap: 29px;
   }
 
   .about-me__portfolio {
@@ -117,7 +139,7 @@
 
   .about-me__details {
     font-size: 12px;
-    margin-bottom: 82px;
+    margin-bottom: 84px;
   }
 
   .about-me__avatar {
@@ -135,7 +157,7 @@
     flex-wrap: wrap-reverse;
     justify-content: center;
     gap: 40px;
-    margin-bottom: 70px;
+    margin: 62px 0 70px;
   }
 
   .about-me__avatar {
@@ -150,7 +172,7 @@
 
 @media screen and (max-width: 576px) {
   .about-me {
-    padding-top: 70px;
+    padding-top: 72px;
     padding-bottom: 70px;
   }
 
@@ -160,26 +182,42 @@
 
   .about-me__profession {
     font-size: 11px;
-    margin: 20px 0 20px;
+    margin: 22px 0 22px;
+  }
+
+  .about-me__profile {
+    margin-top: 60px;
   }
 
   .about-me__details {
     font-size: 11px;
-    margin-bottom: 40px;
+    margin-bottom: 38px;
     line-height: 1.45;
   }
 
   .about-me__portfolio {
-    gap: 23px;
+    gap: 24px;
   }
 
   .about-me__portfolio-title {
     font-size: 14px;
-    padding-bottom: 20px;
+    padding-bottom: 21px;
   }
 
   .about-me__portfolio-link {
     font-size: 18px;
+    margin-bottom: 22px;
+  }
+
+  .about-me__portfolio-items {
+    gap: 24px;
+  }
+
+  .about-me__portfolio-icon {
+    width: 11px;
+    height: 10px;
+    padding: 4px 4px 10px 0;
+    margin: 0;
   }
 
   .about-me__portfolio-img {

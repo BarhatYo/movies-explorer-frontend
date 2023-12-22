@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./Movies.css";
 import SearchForm from "../SearchForm/SearchForm";
-import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import filmsData from "../../constants/films.js";
 
@@ -19,10 +18,9 @@ export default function Movies() {
   };
 
   return (
-    <div className="movies">
+    <main className="movies">
       <SearchForm handleSearch={handleSearch} />
-      <FilterCheckbox />
       <MoviesCardList films={films} isSaved={false} />
-    </div>
+    </main>
   );
 }

@@ -40,8 +40,11 @@
   font-size: 14px;
   line-height: 1.21;
   font-weight: 500;
-  border-bottom: 1px solid #E8E8E8;
-  outline: none;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.login__input:focus {
+  outline: 1px solid #a0a0a0;
 }
 
 .login__input-label {
@@ -61,7 +64,7 @@
 }
 
 .login__button {
-  margin-top: 127px;
+  margin-top: 200px;
   height: 45px;
   border-radius: 3px;
   border: none;
@@ -75,7 +78,7 @@
 }
 
 .login__button:hover {
-  background-color: rgba(52,86,243, 0.8)
+  background-color: rgba(52, 86, 243, 0.8);
 }
 
 .login__not-registred {
@@ -99,13 +102,13 @@
 }
 
 .login__register-link:hover {
-  color: rgba(52,86,243, 0.8)
+  color: rgba(52, 86, 243, 0.7);
 }
 
 @media screen and (max-width: 576px) {
   .login__content {
     width: 260px;
-    height: 100%;
+    height: 100vh;
   }
 
   .login__form {
@@ -125,7 +128,7 @@
   .login__title {
     margin-bottom: 80px;
   }
-  
+
   .login__action {
     margin-top: auto;
   }

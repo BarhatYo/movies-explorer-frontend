@@ -7,13 +7,13 @@
 
 @media screen and (max-width: 992px) {
   .movies {
-    padding: 80px clamp(0.875rem, 0.1607rem + 3.5714vw, 1.875rem) 100px;
+    padding: 80px clamp(0.875rem, 0.1607rem + 3.5714vw, 1.875rem) 95px;
   }
 }
 
 @media screen and (max-width: 576px) {
   .movies {
-    padding: 84px 10px 160px;
+    padding: 84px 10px 100px;
     display: flex;
     align-items: center;
     flex-direction: column;

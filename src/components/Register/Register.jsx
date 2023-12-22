@@ -32,7 +32,7 @@ export default function Register() {
 
   return (
     // Тексты ошибок будет обновлены на следующем этапе после настройки логики регистрации/авторизации
-    <div className="register">
+    <main className="register">
       <div className="register__content">
         <div className="register__hello">
           <img
@@ -41,13 +41,12 @@ export default function Register() {
             alt="Логотип"
             onClick={goToMain}
           />
-          <h2 className="register__title">Добро пожаловать!</h2>
+          <h1 className="register__title">Добро пожаловать!</h1>
         </div>
         <form
           className="register__form"
           name="register__form"
           onSubmit={handleRegister}
-          noValidate
         >
           <label className="register__input-label" htmlFor="name">
             Имя
@@ -58,6 +57,9 @@ export default function Register() {
             id="name"
             value={name}
             onChange={handleNameChange}
+            minLength="2"
+            maxLength="30"
+            placeholder="Введите имя"
             required
           />
           <span className="register__input-error">Текст ошибки</span>
@@ -71,6 +73,8 @@ export default function Register() {
             id="email"
             value={email}
             onChange={handleEmailChange}
+            minLength="2"
+            placeholder="Введите email"
             required
           />
           <span className="register__input-error">Текст ошибки</span>
@@ -83,6 +87,8 @@ export default function Register() {
             type="password"
             id="password"
             value={password}
+            minLength="4"
+            placeholder="Введите пароль"
             onChange={handlePasswordChange}
             required
           />
@@ -98,6 +104,6 @@ export default function Register() {
           </div>
         </form>
       </div>
-    </div>
+    </main>
   );
 }

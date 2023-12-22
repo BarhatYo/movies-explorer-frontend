@@ -1,7 +1,6 @@
 import React from "react";
 import "./ProfileButton.css";
 import { Link, useLocation } from "react-router-dom";
-import profileButton from '../../images/profile_authorized.png';
 
 export default function ProfileButton({ isMobile }) {
   const location = useLocation();
@@ -9,16 +8,17 @@ export default function ProfileButton({ isMobile }) {
   return location.pathname === "/" ? (
     <Link
       to="/profile"
-      className={`profile-button ${isMobile && "profile-button_active"} profile-button__main-page`}
+      className={`profile-button profile-button_page_main ${isMobile ? "profile-button_active" : ''}`}
     >
-      <img className="profile-button__main-page-image" src={profileButton} alt="Иконка профиля"></img>
+      <span className="profile-button__username">Аккаунт</span>
+      <div className="profile-button__icon" />
     </Link>
   ) : (
     <Link
       to="/profile"
-      className={`profile-button ${isMobile && "profile-button_active"}`}
+      className={`profile-button ${isMobile ? "profile-button_active" : ''}`}
     >
-      <p className="profile-button__username">Аккаунт</p>
+      <span className="profile-button__username">Аккаунт</span>
       <div className="profile-button__icon" />
     </Link>
   );

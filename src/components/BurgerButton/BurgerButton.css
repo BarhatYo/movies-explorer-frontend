@@ -63,11 +63,23 @@
   .menu-burger {
     display: flex;
     align-self: end;
-    margin: 25px 38px 26px 0;
+    margin: 26px 8px 26px 0;
   }
 
   .menu-burger_active {
     margin: 25px 20px 26px 0;
+  }
+
+  .menu-burger_active::before {
+    bottom: 48.5%;
+    transform: rotate(45deg) translate(0, 80%);
+    width: 22px;
+  }
+
+  .menu-burger_active::after {
+    top: 52%;
+    transform: rotate(-45deg) translate(0, -60%);
+    width: 22px;
   }
 }
 
@@ -83,14 +95,14 @@
   }
 
   .menu-burger_active::before {
-    bottom: 48, 5%;
-    transform: rotate(45deg) translate(0, 95%);
+    bottom: 48.5%;
+    transform: rotate(45deg) translate(0, 80%);
     width: 22px;
   }
 
   .menu-burger_active::after {
     top: 52%;
-    transform: rotate(-45deg) translate(0, -50%);
+    transform: rotate(-45deg) translate(0, -60%);
     width: 22px;
   }
 }

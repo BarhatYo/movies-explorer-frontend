@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./MoviesCard.css";
 import likeIcon from "../../images/like.svg";
 import likeInactiveIcon from "../../images/like_inactive.svg";
@@ -36,13 +36,14 @@ export default function MoviesCard({
     <div className="movies-card">
       <img src={image} className="movies-card__image" alt={name} />
       <div className="movies-card__info">
-        <p className="movies-card__name">{name}</p>
+        <h2 className="movies-card__name">{name}</h2>
         {isSaved ? (
           <button
-            className="movie-card__like"
+            className="movies-card__like"
             onClick={handleUnsave}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
+            type="button"
           >
             <img
               className="movies-card__like-icon"
@@ -51,7 +52,11 @@ export default function MoviesCard({
             />
           </button>
         ) : (
-          <button className="movie-card__like" onClick={handleLike}>
+          <button
+            className="movies-card__like"
+            onClick={handleLike}
+            type="button"
+          >
             <img
               className="movies-card__like-icon"
               src={isLikedState ? likeIcon : likeInactiveIcon}

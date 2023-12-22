@@ -9,10 +9,28 @@ export default function Footer() {
       </h4>
       <div className="footer__info">
         <p className="footer__date">&#169; {new Date().getFullYear()}</p>
-        <div className="footer__links">
-          <a className="footer__link" href='https://practicum.yandex.ru/' target="_blank" rel="noreferrer">Яндекс.Практикум</a>
-          <a className="footer__link" href='https://github.com/BarhatYo' target="_blank" rel="noreferrer">Github</a>
-        </div>
+        <ul className="footer__links">
+          <li className="footer__link-item">
+            <a
+              className="footer__link"
+              href="https://practicum.yandex.ru/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Яндекс.Практикум
+            </a>
+          </li>
+          <li className="footer__link-item">
+            <a
+              className="footer__link"
+              href="https://github.com/BarhatYo"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Github
+            </a>
+          </li>
+        </ul>
       </div>
     </footer>
   );

@@ -40,7 +40,7 @@ export default function MoviesCardList({ films, isSaved, onDelete }) {
 
   return (
     <>
-      <div className="movies-card-list">
+      {/* <div className="movies-card-list">
         {filmsToShow.map((film) => (
           <MoviesCard
             image={film.image}
@@ -53,9 +53,29 @@ export default function MoviesCardList({ films, isSaved, onDelete }) {
             filmId={film._id}
           />
         ))}
-      </div>
+      </div> */}
+      <ul className="movies-card-list">
+        {filmsToShow.map((film) => (
+          <li className="movies-card-list__item">
+            <MoviesCard
+              image={film.image}
+              duration={film.duration}
+              name={film.name}
+              isLiked={film.isLiked}
+              isSaved={isSaved}
+              key={film._id}
+              onDelete={onDelete}
+              filmId={film._id}
+            />
+          </li>
+        ))}
+      </ul>
       {loadMore && (
-        <button className="movies-card-list__more" onClick={handleShowMore}>
+        <button
+          className="movies-more-button"
+          onClick={handleShowMore}
+          type="button"
+        >
           Ещё
         </button>
       )}

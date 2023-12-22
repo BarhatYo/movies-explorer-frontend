@@ -1,12 +1,14 @@
 .promo {
   min-height: 574px;
   background-color: #073042;
+  width: 100%;
 }
 
 .promo__content {
   margin: auto;
   box-sizing: border-box;
   max-width: 1280px;
+  width: 100%;
   padding: 0 clamp(3.125rem, 1.25rem + 3.9063vw, 4.375rem);
 }
 
@@ -42,14 +44,18 @@
   font-size: 12px;
   color: #fff;
   background: transparent;
-  width: 131px;
+  width: 129px;
   height: 36px;
   box-sizing: border-box;
-  padding: 9px 20px 11px;
+  padding: 9px 18px 11px;
   border: 1px solid #fff;
   border-radius: 3px;
   cursor: pointer;
   text-decoration: none;
+}
+
+.promo__more:hover {
+  opacity: 0.8;
 }
 
 @media screen and (max-width: 998px) {

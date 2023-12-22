@@ -1,5 +1,6 @@
 .header {
   background-color: #073042;
+  width: 100%;
 }
 
 .header_authorized {
@@ -11,6 +12,7 @@
   justify-content: space-between;
   align-items: center;
   max-width: 1280px;
+  width: 100%;
   margin: auto;
   height: 74px;
   box-sizing: border-box;
@@ -60,11 +62,11 @@
     flex-direction: column;
     width: clamp(15.625rem, 3.5714rem + 60.2679vw, 32.5rem);
     background-color: #fff;
+    gap: 0;
   }
 
   .header__menu_authorized {
     background-color: #073042;
-    gap: 40px;
   }
 
   .header__menu-mobile_active {

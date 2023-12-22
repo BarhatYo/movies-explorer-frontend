@@ -2,11 +2,11 @@ import React from "react";
 import "./AboutMe.css";
 import SectionTitle from "../SectionTitle/SectionTitle";
 import avatar from "../../images/author.jpg";
-import linkIcon from '../../images/link-icon.jpg';
+import linkIcon from "../../images/link-icon.svg";
 
 export default function AboutMe() {
   return (
-    <div className="about-me">
+    <section className="about-me">
       <SectionTitle title={"Студент"} />
       <div className="about-me__profile">
         <div className="about-me__info">
@@ -19,7 +19,12 @@ export default function AboutMe() {
             Контур». После того, как прошёл курс по веб&#8209;разработке, начал
             заниматься фриланс-заказами и ушёл с постоянной работы.
           </p>
-          <a className="about-me__github-link" href='https://github.com/BarhatYo' target="_blank" rel="noreferrer">
+          <a
+            className="about-me__github-link"
+            href="https://github.com/BarhatYo"
+            target="_blank"
+            rel="noreferrer"
+          >
             GitHub
           </a>
         </div>
@@ -27,19 +32,54 @@ export default function AboutMe() {
       </div>
       <div className="about-me__portfolio">
         <h4 className="about-me__portfolio-title">Портфолио</h4>
-        <div className="about-me__portfolio-item">
-          <a className="about-me__portfolio-link" href='https://barhatyo.github.io/how-to-learn/' target="_blank" rel="noreferrer">Статичный сайт</a>
-          <a className="about-me__portfolio-icon" href='https://barhatyo.github.io/how-to-learn/' target="_blank" rel="noreferrer"><img className="about-me__portfolio-img" src={linkIcon} alt="Иконка ссылки"/></a>
-        </div>
-        <div className="about-me__portfolio-item">
-          <a className="about-me__portfolio-link" href='https://barhatyo.github.io/russian-travel' target="_blank" rel="noreferrer">Адаптивный сайт</a>
-          <a className="about-me__portfolio-icon" href='https://github.com/russian-travel' target="_blank" rel="noreferrer"><img className="about-me__portfolio-img" src={linkIcon} alt="Иконка ссылки"/></a>
-        </div>
-        <div className="about-me__portfolio-item">
-          <a className="about-me__portfolio-link" href='https://barkhatos.nomoredomainsicu.ru/' target="_blank" rel="noreferrer">Одностраничное приложение</a>
-          <a className="about-me__portfolio-icon" href='https://barkhatos.nomoredomainsicu.ru/' target="_blank" rel="noreferrer"><img className="about-me__portfolio-img" src={linkIcon} alt="Иконка ссылки"/></a>
-        </div>
+        <ul className="about-me__portfolio-items">
+          <li className="about-me__portfolio-item">
+            <a
+              className="about-me__portfolio-item-link"
+              href="https://barhatyo.github.io/how-to-learn/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span className="about-me__portfolio-link">Статичный сайт</span>
+              <img
+                className="about-me__portfolio-icon"
+                src={linkIcon}
+                alt="Иконка ссылки"
+              />
+            </a>
+          </li>
+          <li className="about-me__portfolio-item">
+            <a
+              className="about-me__portfolio-item-link"
+              href="https://barhatyo.github.io/russian-travel"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span className="about-me__portfolio-link">Адаптивный сайт</span>
+              <img
+                className="about-me__portfolio-icon"
+                src={linkIcon}
+                alt="Иконка ссылки"
+              />
+            </a>
+          </li>
+          <li className="about-me__portfolio-item">
+            <a
+              className="about-me__portfolio-item-link"
+              href="https://barkhatos.nomoredomainsicu.ru/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span className="about-me__portfolio-link">Одностраничное приложение</span>
+              <img
+                className="about-me__portfolio-icon"
+                src={linkIcon}
+                alt="Иконка ссылки"
+              />
+            </a>
+          </li>
+        </ul>
       </div>
-    </div>
+    </section>
   );
 }

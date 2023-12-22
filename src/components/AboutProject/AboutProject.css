@@ -8,7 +8,7 @@
 .about__info {
   display: flex;
   justify-content: space-between;
-  gap: 40px;
+  gap: 55px;
   margin: 70px 0 110px;
 }
 
@@ -65,6 +65,7 @@
 
   .about__info {
     margin: 70px 0 96px;
+    gap: 35px;
   }
 
   .about__info-description {
@@ -94,14 +95,14 @@
 
 @media screen and (max-width: 576px) {
   .about {
-    padding-top: 70px;
-    padding-bottom: 69px;
+    padding-top: 71px;
+    padding-bottom: 70px;
   }
 
   .about__info {
     flex-direction: column;
     gap: 56px;
-    margin: 63px 0 62px;
+    margin: 62px 0 61px;
   }
 
   .about__info-title {

@@ -9,8 +9,8 @@ export default function Navigation({
 }) {
   return (
     <nav
-      className={`navigation ${isMobile && "navigation_active"} ${
-        isAuthorized && "navigation_authorized"
+      className={`navigation ${isMobile ? "navigation_active" : ''} ${
+        isAuthorized ? "navigation_authorized" : ''
       }`}
     >
       <NavLink
@@ -18,7 +18,7 @@ export default function Navigation({
         className={({ isActive }) =>
           `navigation__link navigation__link_hidden ${
             isActive ? "navigation__link_active" : ""
-          } ${isAuthorized && "navigation__link_authorized"}`
+          } ${isAuthorized ? "navigation__link_authorized" : ''}`
         }
         onClick={handleMobileMenuClick}
       >
@@ -28,7 +28,7 @@ export default function Navigation({
         to="/movies"
         className={({ isActive }) =>
           `navigation__link ${isActive ? "navigation__link_active" : ""} ${
-            isAuthorized && "navigation__link_authorized"
+            isAuthorized ? "navigation__link_authorized" : ''
           }`
         }
         onClick={handleMobileMenuClick}
@@ -39,7 +39,7 @@ export default function Navigation({
         to="/saved-movies"
         className={({ isActive }) =>
           `navigation__link ${isActive ? "navigation__link_active" : ""} ${
-            isAuthorized && "navigation__link_authorized"
+            isAuthorized ? "navigation__link_authorized" : ''
           }`
         }
         onClick={handleMobileMenuClick}

@@ -1,19 +1,19 @@
 .filter-checkbox {
   display: flex;
-  padding-bottom: 118px;
+  gap: 15px;
+  align-items: center;
+  cursor: pointer;
+  margin-bottom: 118px;
+  width: 170px;
 }
 
 .filter-checkbox__text {
   font-size: 13px;
   line-height: 1.38;
-  width: 117px;
 }
 
-.filter-checkbox__label {
-  display: flex;
-  gap: 15px;
-  align-items: center;
-  cursor: pointer;
+.filter-checkbox__text:hover {
+  opacity: 0.7;
 }
 
 .filter-checkbox__input {
@@ -31,18 +31,16 @@
   height: 14px;
 }
 
-.filter-checkbox__label-text {
-  margin: 0;
-  font-size: 13px;
-  line-height: 1.38;
+.filter-checkbox__icon:hover {
+  opacity: 0.7;
 }
 
 .filter-checkbox__icon::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
-  background-color: #2BE080;
+  background-color: #2be080;
   width: 34px;
   height: 14px;
   border-radius: 18px;
@@ -51,7 +49,7 @@
 
 .filter-checkbox__icon::after {
   display: block;
-  content: '';
+  content: "";
   position: absolute;
   width: 10px;
   height: 10px;
@@ -59,27 +57,25 @@
   background-color: #fff;
   right: 2px;
   top: 2px;
-  transition: background-color 0.3s, left .3s;
+  transition: background-color 0.3s, left 0.3s;
 }
 
 .filter-checkbox__input:checked + .filter-checkbox__icon::before {
-  background-color: #EBEBEB;
+  background-color: #ebebeb;
 }
 
 .filter-checkbox__input:checked + .filter-checkbox__icon::after {
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
   left: 2px;
 }
 
 @media screen and (max-width: 992px) {
   .filter-checkbox {
+    gap: 16px;
     flex-direction: row;
     justify-content: end;
-    padding-bottom: 128px;
-  }
-
-  .filter-checkbox__label {
-    gap: 16px;
+    margin-bottom: 128px;
+    margin-left: auto;
   }
 
   .filter-checkbox__icon {
@@ -90,10 +86,11 @@
 @media screen and (max-width: 576px) {
   .filter-checkbox {
     justify-content: center;
-    padding-bottom: 93px;
+    gap: 13px;
+    margin: 0 auto 93px;
   }
 
-  .filter-checkbox__label-text {
+  .filter-checkbox__text {
     gap: 13px;
     font-size: 11px;
   }

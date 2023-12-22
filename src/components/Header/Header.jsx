@@ -34,7 +34,7 @@ export default function Header({
       }`}
     >
       <div
-        className={`header__overlay ${isMobile && "header__overlay_active"}`}
+        className={`header__overlay ${isMobile ? "header__overlay_active" : ''}`}
       ></div>
       <div className="header__content">
         <img
@@ -47,7 +47,7 @@ export default function Header({
           <>
             <div
               className={`header__menu ${
-                isMobile && "header__menu-mobile_active"
+                isMobile ? "header__menu-mobile_active" : ''
               }`}
             >
               <BurgerButton
@@ -66,8 +66,8 @@ export default function Header({
             {isAuthorized ? (
               <div
                 className={`header__menu ${
-                  isMobile && "header__menu-mobile_active"
-                } ${isAuthorized && 'header__menu_authorized'}`}
+                  isMobile ? "header__menu-mobile_active" : ''
+                } ${isAuthorized ? 'header__menu_authorized' : ''}`}
               >
                 <BurgerButton
                   isMobile={isMobile}

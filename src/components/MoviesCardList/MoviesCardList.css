@@ -4,9 +4,17 @@
   flex-wrap: wrap;
   row-gap: 38px;
   justify-content: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
-.movies-card-list__more {
+.movies-card-list__item {
+  text-decoration: none;
+  width: calc(25% - 15px)
+}
+
+.movies-more-button {
   display: block;
   width: 320px;
   height: 36px;
@@ -20,7 +28,7 @@
   background-color: #F8F8F8;
 }
 
-.movies-card-list__more:hover {
+.movies-more-button:hover {
   background-color: rgba(248,248,248, 0.8);
 }
 
@@ -29,7 +37,11 @@
     gap: 30px;
   }
 
-  .movies-card-list__more {
+  .movies-card-list__item {
+    width: calc(50% - 15px);
+  }
+
+  .movies-more-button {
     margin-top: 60px;
   }
 }
@@ -39,7 +51,11 @@
     gap: 33px;
   }
 
-  .movies-card-list__more {
+  .movies-card-list__item {
+    width: 300px;
+  }
+
+  .movies-more-button {
     width: 240px;
     margin-top: 58px;
   }

@@ -15,7 +15,7 @@ export default function Login() {
     setPassword(e.target.value);
   };
 
-  const handleRegister = (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
   };
 
@@ -27,7 +27,7 @@ export default function Login() {
 
   return (
     // Тексты ошибок будет обновлены на следующем этапе после настройки логики регистрации/авторизации
-    <div className="login">
+    <main className="login">
       <div className="login__content">
         <div className="login__hello">
           <img
@@ -36,9 +36,9 @@ export default function Login() {
             alt="Логотип"
             onClick={goToMain}
           />
-          <h2 className="login__title">Рады видеть!</h2>
+          <h1 className="login__title">Рады видеть!</h1>
         </div>
-        <form className="login__form" name="login__form" noValidate>
+        <form className="login__form" name="login__form" onSubmit={handleLogin}>
           <label className="login__input-label" htmlFor="email">
             E-mail
           </label>
@@ -49,6 +49,8 @@ export default function Login() {
             id="email"
             value={email}
             onChange={handleEmailChange}
+            minLength="2"
+            placeholder="Введите email"
             required
           />
           <span className="login__input-error">Текст ошибки</span>
@@ -62,6 +64,8 @@ export default function Login() {
             id="password"
             value={password}
             onChange={handlePasswordChange}
+            minLength="4"
+            placeholder="Введите пароль"
             required
           />
           <span className="login__input-error">Текст ошибки</span>
@@ -71,13 +75,13 @@ export default function Login() {
               <p className="login__not-registred-text">
                 Ещё не зарегистрированы?
               </p>
-              <Link to="/signup" className="login__register-link" href=" ">
+              <Link to="/signup" className="login__register-link">
                 Регистрация
               </Link>
             </div>
           </div>
         </form>
       </div>
-    </div>
+    </main>
   );
 }

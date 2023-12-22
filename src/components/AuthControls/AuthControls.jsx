@@ -14,9 +14,9 @@ export default function AuthControls() {
   }
 
   return (
-    <div className='auth-controls'>
-      <button className='auth-controls__sign-up' onClick={goToSignUp}>Регистрация</button>
-      <button className='auth-controls__sign-in'onClick={goToSignIn}>Войти</button>
-    </div>
+    <nav className='auth-controls'>
+      <button className='auth-controls__sign-up' onClick={goToSignUp} type="button">Регистрация</button>
+      <button className='auth-controls__sign-in'onClick={goToSignIn} type="button">Войти</button>
+    </nav>
   )
 }

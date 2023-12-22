@@ -12,6 +12,10 @@
   text-decoration: none;
 }
 
+.profile-button:hover {
+  opacity: 0.7;
+}
+
 .profile-button__username {
   font-size: 13px;
   color: #000;
@@ -28,11 +32,11 @@
   background-image: url("../../images/icon__COLOR_icon-main.svg");
   background-repeat: no-repeat;
   background-position: center;
-  padding-right: 11px;
+  margin-right: 3px;
 }
 
-.profile-button__main-page {
-  background-color: transparent;
+.profile-button_page_main {
+  background-color: #2BE080;
 }
 
 @media screen and (max-width: 768px) {
