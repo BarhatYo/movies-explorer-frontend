@@ -1,0 +1,11 @@
+/* .main {
+  max-width: 1280px;
+  padding: 0 clamp(3.125rem, 1.25rem + 3.9063vw, 4.375rem);
+}
+
+@media screen and (max-width: 768px) {
+  .main {
+    max-width: 768px;
+    padding: 0 clamp(0.625rem, -1.1607rem + 8.9286vw, 3.125rem);;
+  }
+} */

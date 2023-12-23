@@ -1,0 +1,125 @@
+.about {
+  margin: auto;
+  box-sizing: border-box;
+  max-width: 1280px;
+  padding: 110px clamp(3.125rem, 1.25rem + 3.9063vw, 4.375rem);
+}
+
+.about__info {
+  display: flex;
+  justify-content: space-between;
+  gap: 55px;
+  margin: 70px 0 110px;
+}
+
+.about__info-title {
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: -0.04em;
+  margin: 0 0 26px 0;
+  line-height: 1.21;
+}
+
+.about__info-description {
+  font-size: 14px;
+  line-height: 1.43;
+  margin: 0;
+}
+
+.about__roadmap {
+  display: flex;
+}
+
+.about__backend {
+  width: clamp(8.75rem, 0.5rem + 17.1875vw, 14.25rem);
+  text-align: center;
+}
+
+.about__frontend {
+  width: clamp(33rem, -3rem + 75vw, 57rem);
+  text-align: center;
+}
+
+.about__week {
+  background-color: #f2f2f2;
+  margin: 0 0 14px 0;
+  height: 36px;
+  line-height: 36px;
+  font-size: 14px;
+}
+
+.about__week_color_green {
+  background-color: #2be080;
+}
+
+.about__dev {
+  margin: 0;
+  font-size: 14px;
+  color: #a0a0a0;
+}
+
+@media screen and (max-width: 988px) {
+  .about__info-title {
+    margin-bottom: 22px;
+  }
+
+  .about__info {
+    margin: 70px 0 96px;
+    gap: 35px;
+  }
+
+  .about__info-description {
+    font-size: 12px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .about {
+    padding: 91px clamp(1.125rem, -0.3036rem + 7.1429vw, 3.125rem);
+  }
+
+  .about__week {
+    height: 35px;
+    line-height: 35px;
+    margin-bottom: 14px;
+  }
+
+  .about__backend {
+    width: clamp(6.25rem, 4.4643rem + 8.9286vw, 8.75rem);
+  }
+
+  .about__frontend {
+    width: clamp(11.5rem, -3.8571rem + 76.7857vw, 33rem);
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .about {
+    padding-top: 71px;
+    padding-bottom: 70px;
+  }
+
+  .about__info {
+    flex-direction: column;
+    gap: 56px;
+    margin: 62px 0 61px;
+  }
+
+  .about__info-title {
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
+
+  .about__info-description {
+    font-size: 11px;
+  }
+
+  .about__week {
+    font-size: 11px;
+    margin-bottom: 9px;
+  }
+
+  .about__dev {
+    font-size: 11px;
+  }
+}
