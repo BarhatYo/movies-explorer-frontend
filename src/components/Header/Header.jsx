@@ -8,16 +8,13 @@ import AuthControls from "../AuthControls/AuthControls";
 import BurgerButton from "../BurgerButton/BurgerButton";
 
 export default function Header({
+  isLoggedIn,
   isMobile,
   handleBurgerClick,
   handleLogin,
   handleMobileMenuClick,
 }) {
-  const [isAuthorized, setIsAuthorized] = useState(true); //надо поменять на false, чтобы увидеть неавторизованной главную страницу
-
-  const handeLogin = () => { //пока не используется
-    setIsAuthorized(true);
-  };
+  // const [isLoggedIn, setIsLoggedIn] = useState(true); //надо поменять на false, чтобы увидеть неавторизованной главную страницу
 
   const navigate = useNavigate();
 
@@ -47,7 +44,7 @@ export default function Header({
           <>
             <div
               className={`header__menu ${
-                isMobile ? "header__menu-mobile_active" : ''
+                isMobile ? "header__menu_mobile-active" : ''
               }`}
             >
               <BurgerButton
@@ -63,21 +60,21 @@ export default function Header({
           </>
         ) : (
           <>
-            {isAuthorized ? (
+            {isLoggedIn ? (
               <div
                 className={`header__menu ${
                   isMobile ? "header__menu-mobile_active" : ''
-                } ${isAuthorized ? 'header__menu_authorized' : ''}`}
+                } ${isLoggedIn ? 'header__menu_authorized' : ''}`}
               >
                 <BurgerButton
                   isMobile={isMobile}
                   handleBurgerClick={handleBurgerClick}
-                  isAuthorized={isAuthorized}
+                  isAuthorized={isLoggedIn}
                 />
                 <Navigation
                   isMobile={isMobile}
                   handleMobileMenuClick={handleMobileMenuClick}
-                  isAuthorized={isAuthorized}
+                  isAuthorized={isLoggedIn}
                 />
                 <ProfileButton
                   isMobile={isMobile}

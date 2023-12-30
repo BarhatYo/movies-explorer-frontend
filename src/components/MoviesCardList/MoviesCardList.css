@@ -28,8 +28,9 @@
   background-color: #F8F8F8;
 }
 
-.movies-more-button:hover {
-  background-color: rgba(248,248,248, 0.8);
+.movies-card__trailer-link {
+  text-decoration: none;
+  color: #000;
 }
 
 @media screen and (max-width: 992px) {

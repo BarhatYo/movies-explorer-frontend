@@ -2,23 +2,16 @@ import React, { useState } from "react";
 import "./Login.css";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../images/logo.svg";
+import useFormValidation from "../../hooks/useFormValidation";
 
-export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };
-
-  const handleLogin = (e) => {
-    e.preventDefault();
-  };
-
+export default function Login({
+  email,
+  password,
+  handleEmailChange,
+  handlePasswordChange,
+  handleLogin,
+}) {
+  
   const navigate = useNavigate();
 
   const goToMain = () => {

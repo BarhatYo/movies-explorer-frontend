@@ -85,6 +85,7 @@
   background-color: transparent;
   color: #ff3055;
   text-decoration: none;
+  cursor: pointer;
 }
 
 .profile__exit-button:hover {
@@ -93,13 +94,19 @@
 
 .profile__form-name-field {
   display: flex;
+  flex-direction: column;
   width: 410px;
-  justify-content: space-between;
+  height: 30px;
   border-bottom: 1px solid #e8e8e8;
 }
 
+.profile__form-name-container {
+  display: flex;
+  justify-content: space-between;
+}
+
 .profile__form-name-label {
-  margin: 0 0 16px;
+  margin: 0 0 3px;
   font-size: 11px;
   line-height: 1.21;
   font-weight: 500;
@@ -110,9 +117,8 @@
   font-size: 11px;
   line-height: 1.21;
   text-align: right;
-
   border: none;
-  padding: 0 0 16px;
+  padding: 0;
   width: 150px;
 }
 
@@ -120,28 +126,43 @@
   outline: 1px solid #a0a0a0;
 }
 
+.profile__form-name-input-error {
+  font-size: 10px;
+  color: #ff004c;
+}
+
 .profile__form-email-field {
   display: flex;
+  flex-direction: column;
   width: 410px;
   justify-content: space-between;
 }
 
+.profile__form-email-container {
+  display: flex;
+  justify-content: space-between;
+}
+
 .profile__form-email-label {
-  margin: 17px 0 0;
+  margin: 17px 0 3px;
   font-size: 11px;
   line-height: 1.21;
   font-weight: 500;
 }
 
 .profile__form-email-input {
-  margin: 0;
+  margin: 16px 0 0;
   font-size: 11px;
   line-height: 1.21;
   text-align: right;
-
   border: none;
-  padding: 16px 0 0;
+  padding: 0;
   width: 150px;
+}
+
+.profile__form-name-input-error {
+  font-size: 10px;
+  color: #ff004c;
 }
 
 .profile__form-email-input:focus {
@@ -178,6 +199,15 @@
   text-align: center;
   line-height: 1.21;
   color: #ff004c;
+}
+
+.profile__form-save-button_disabled {
+  background-color: #F8F8F8;
+  color: #C2C2C2;
+}
+
+.profile__form-error_hidden {
+  opacity: 0;
 }
 
 @media screen and (max-width: 768px) {

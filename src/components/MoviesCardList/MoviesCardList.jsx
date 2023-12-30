@@ -2,25 +2,37 @@ import React, { useEffect, useState } from "react";
 import "./MoviesCardList.css";
 import MoviesCard from "../MoviesCard/MoviesCard";
 
-export default function MoviesCardList({ films, isSaved, onDelete }) {
-  const [visibleCards, setVisibleCards] = useState(16);
+export default function MoviesCardList({
+  films,
+  isSavedMovies,
+  onDelete,
+  getAllMovies,
+}) {
+  const [visibleCards, setVisibleCards] = useState(undefined);
   const [loadMore, setLoadMore] = useState(films.length > visibleCards);
-  const [cardsPerPage, setCardsPerPage] = useState(16);
+  const [cardsPerPage, setCardsPerPage] = useState(undefined);
 
   const filmsToShow = films.slice(0, visibleCards);
 
   useEffect(() => {
+    if (isSavedMovies) {
+      return;
+    }
+    setVisibleCards(16);
     const handleResize = () => {
       const width = window.innerWidth;
-      if (width >= 1280) {
+      if (width > 992) {
         setCardsPerPage(16);
       } else if (width > 576 && width <= 992) {
         setCardsPerPage(8);
       } else if (width <= 576) {
         setCardsPerPage(5);
       }
-      setVisibleCards(cardsPerPage);
-      setLoadMore(cardsPerPage < films.length);
+
+      setTimeout(() => {
+        setVisibleCards(cardsPerPage);
+        setLoadMore(cardsPerPage < films.length);
+      }, 1000);
     };
 
     handleResize();
@@ -30,7 +42,7 @@ export default function MoviesCardList({ films, isSaved, onDelete }) {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [cardsPerPage, films.length]);
+  }, [cardsPerPage, films.length, isSavedMovies]);
 
   const handleShowMore = () => {
     const newVisibleCards = visibleCards + cardsPerPage;
@@ -40,33 +52,52 @@ export default function MoviesCardList({ films, isSaved, onDelete }) {
 
   return (
     <>
-      {/* <div className="movies-card-list">
-        {filmsToShow.map((film) => (
-          <MoviesCard
-            image={film.image}
-            duration={film.duration}
-            name={film.name}
-            isLiked={film.isLiked}
-            isSaved={isSaved}
-            key={film._id}
-            onDelete={onDelete}
-            filmId={film._id}
-          />
-        ))}
-      </div> */}
       <ul className="movies-card-list">
         {filmsToShow.map((film) => (
-          <li className="movies-card-list__item">
-            <MoviesCard
-              image={film.image}
-              duration={film.duration}
-              name={film.name}
-              isLiked={film.isLiked}
-              isSaved={isSaved}
-              key={film._id}
-              onDelete={onDelete}
-              filmId={film._id}
-            />
+          <li
+            className="movies-card-list__item"
+            key={isSavedMovies ? film._id : film.id}
+          >
+            {isSavedMovies ? (
+              <MoviesCard
+                _id={film._id}
+                movieId={film.id}
+                nameRU={film.nameRU}
+                nameEN={film.nameEN}
+                director={film.director}
+                country={film.country}
+                year={film.year}
+                duration={film.duration}
+                description={film.description}
+                trailerLink={film.trailerLink}
+                thumbNail={film.thumbNail}
+                image={film.image}
+                isLiked={film.isLiked}
+                isSavedMovies={isSavedMovies}
+                onDelete={onDelete}
+              />
+            ) : (
+              <MoviesCard
+                _id={film._id}
+                movieId={film.id}
+                nameRU={film.nameRU}
+                nameEN={film.nameEN}
+                director={film.director}
+                country={film.country}
+                year={film.year}
+                duration={film.duration}
+                description={film.description}
+                trailerLink={film.trailerLink}
+                thumbNail={
+                  "https://api.nomoreparties.co" +
+                  film.image.formats.thumbnail.url
+                }
+                image={"https://api.nomoreparties.co" + film.image.url}
+                isLiked={film.isLiked}
+                isSavedMovies={isSavedMovies}
+                getAllMovies={getAllMovies}
+              />
+            )}
           </li>
         ))}
       </ul>

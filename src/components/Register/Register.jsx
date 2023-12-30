@@ -3,26 +3,7 @@ import "./Register.css";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../images/logo.svg";
 
-export default function Register() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleNameChange = (e) => {
-    setName(e.target.value);
-  };
-
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };
-
-  const handleRegister = (e) => {
-    e.preventDefault();
-  };
+export default function Register({ name, email, password, handleNameChange, handleEmailChange, handlePasswordChange, handleRegister }) {
 
   const navigate = useNavigate();
 
