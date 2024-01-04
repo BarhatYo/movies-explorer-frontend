@@ -2,47 +2,65 @@ import React, { useEffect, useState } from "react";
 import "./SearchForm.css";
 import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
 
-export default function SearchForm({ findMovies, isSaved, films }) {
+export default function SearchForm({
+  findMovies,
+  isSaved,
+  isShort,
+  setIsShort,
+}) {
   const [query, setQuery] = useState("");
-  const [isShort, setIsShort] = useState(false);
-
-  const handleChecked = () => {
-    setIsShort(!isShort);
-  };
+  const [inputError, setInputError] = useState(false);
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    findMovies(query, isShort);
+    if (!query || !query.trim()) {
+      setInputError(true);
+    } else {
+      setInputError(false);
+      findMovies(query.trim());
+    }
   };
+  
 
   useEffect(() => {
     if (isSaved) {
       return;
     }
-    const lastSearchString = localStorage.getItem("lastSearch");
-    if (lastSearchString) {
-      const lastSearch = JSON.parse(lastSearchString);
-      findMovies(lastSearch.query, lastSearch.isShort);
-      setQuery(lastSearch.query);
-      setIsShort(lastSearch.isShort);
-    }
-  }, [films]);
+    const lastSearch = localStorage.getItem("lastSearch");
+    setQuery(lastSearch);
+  }, []);
 
   return (
     <>
-      <form className="search-form" name="search" onSubmit={handleSubmit}>
+      <form
+        className="search-form"
+        name="search"
+        onSubmit={handleSubmit}
+        noValidate
+      >
         <div className="search-form__search">
           <input
-            className="search-form__input"
+            className={`search-form__input ${
+              inputError ? "search-form__input_error" : ""
+            }`}
             placeholder="Фильм"
-            onChange={(e) => setQuery(e.target.value)}
-            value={query}
+            onChange={(e) => {
+              setInputError(false);
+              setQuery(e.target.value);
+            }}
+            value={query || ""}
             name="search-input"
+            minLength="1"
             required
           />
           <button className="search-form__button">Найти</button>
         </div>
-        <FilterCheckbox handleChecked={handleChecked} isShort={isShort} />
+        {inputError && (
+          <span className="search-form__error-text">
+            Введите ключевое слово
+          </span>
+        )}
+        <FilterCheckbox isShort={isShort} setIsShort={setIsShort} />
       </form>
     </>
   );

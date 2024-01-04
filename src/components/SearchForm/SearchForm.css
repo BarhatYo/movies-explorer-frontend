@@ -1,3 +1,7 @@
+.search-form {
+  position: relative;
+}
+
 .search-form__search {
   border-bottom: 1px solid #e8e8e8;
   display: flex;
@@ -20,6 +24,14 @@
 .search-form__input::placeholder {
   font-size: 28px;
   color: #a0a0a0;
+}
+
+.search-form__error-text {
+  display: block;
+  position: absolute;
+  color: #f00;
+  top: -30px;
+  left: 0;
 }
 
 .search-form__button {

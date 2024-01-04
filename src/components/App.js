@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import Header from "./Header/Header";
 import Main from "./Main/Main";
@@ -15,32 +15,29 @@ import * as mainApi from "../utils/MainApi";
 
 export default function App() {
   const [isMobile, setIsMobile] = useState(false);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [currentUser, setCurrentUser] = useState({});
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  const navigate = useNavigate();
-
-  const isLoggedInStorage = localStorage.getItem("isLoggedIn");
-
-  useEffect(() => {
-    localStorage.setItem("isLoggedIn", isLoggedIn);
-  }, [isLoggedIn]);
-
-  useEffect(() => {
-    isLoggedInStorage === true &&
-      mainApi.getProfile().then((userInfo) => setCurrentUser(userInfo));
-  }, [isLoggedInStorage]);
+  const [currentUser, setCurrentUser] = useState(
+    JSON.parse(localStorage.getItem("currentUser")) || {}
+  );
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    localStorage.getItem("isLoggedIn") || false
+  );
 
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    handleTokenCheck(token);
+    if (token) {
+      handleTokenCheck(token);
+    } else {
+      localStorage.removeItem("token");
+      localStorage.removeItem("lastSearch");
+      localStorage.removeItem("isLoggedIn");
+      localStorage.removeItem("savedMovies");
+      localStorage.removeItem("foundMoviesFromBeatFilm");
+      localStorage.removeItem("currentUser");
+    }
   }, [token]);
 
-  const handleTokenCheck = () => {
+  const handleTokenCheck = (token) => {
     if (token) {
       mainApi
         .checkToken(token)
@@ -49,47 +46,6 @@ export default function App() {
         })
         .catch((err) => console.log(err));
     }
-  };
-
-  const handleNameChange = (e) => {
-    setName(e.target.value);
-  };
-
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };
-
-  const handleRegister = (e) => {
-    e.preventDefault();
-    mainApi.register(name, email, password).then(() => {
-      handleRegisterLogin(email, password);
-      setName("");
-      setEmail("");
-      setPassword("");
-    });
-  };
-
-  const handleRegisterLogin = (email, password) => {
-    mainApi.login(email, password).then(() => {
-      setEmail("");
-      setPassword("");
-      setIsLoggedIn(true);
-      navigate("/movies", { replace: true });
-    });
-  };
-
-  const handleLogin = (e) => {
-    e.preventDefault();
-    mainApi.login(email, password).then(() => {
-      setEmail("");
-      setPassword("");
-      setIsLoggedIn(true);
-      navigate("/movies", { replace: true });
-    });
   };
 
   const handleBurgerClick = () => {
@@ -108,13 +64,8 @@ export default function App() {
             path="/signup"
             element={
               <Register
-                name={name}
-                email={email}
-                password={password}
-                handleNameChange={handleNameChange}
-                handleEmailChange={handleEmailChange}
-                handlePasswordChange={handlePasswordChange}
-                handleRegister={handleRegister}
+                setCurrentUser={setCurrentUser}
+                setIsLoggedIn={setIsLoggedIn}
               />
             }
           />
@@ -122,11 +73,8 @@ export default function App() {
             path="/signin"
             element={
               <Login
-                email={email}
-                password={password}
-                handleEmailChange={handleEmailChange}
-                handlePasswordChange={handlePasswordChange}
-                handleLogin={handleLogin}
+                setIsLoggedIn={setIsLoggedIn}
+                setCurrentUser={setCurrentUser}
               />
             }
           />
@@ -161,7 +109,7 @@ export default function App() {
                     <Footer />
                   </>
                 }
-                isLoggedIn={isLoggedInStorage}
+                isLoggedIn={isLoggedIn}
               />
             }
           />
@@ -181,34 +129,30 @@ export default function App() {
                     <Footer />
                   </>
                 }
-                isLoggedIn={isLoggedInStorage}
+                isLoggedIn={isLoggedIn}
               />
             }
-            // element={
-            //   <>
-            //     <Header
-            //       isLoggedIn={isLoggedIn}
-            //       isMobile={isMobile}
-            //       handleBurgerClick={handleBurgerClick}
-            //       handleMobileMenuClick={handleMobileMenuClick}
-            //     />
-            //     <SavedMovies />
-            //     <Footer />
-            //   </>
-            // }
           />
           <Route
             path="/profile"
             element={
-              <>
-                <Header
-                  isLoggedIn={isLoggedIn}
-                  isMobile={isMobile}
-                  handleBurgerClick={handleBurgerClick}
-                  handleMobileMenuClick={handleMobileMenuClick}
-                />
-                <Profile />
-              </>
+              <ProtectedRoute
+                element={
+                  <>
+                    <Header
+                      isLoggedIn={isLoggedIn}
+                      isMobile={isMobile}
+                      handleBurgerClick={handleBurgerClick}
+                      handleMobileMenuClick={handleMobileMenuClick}
+                    />
+                    <Profile
+                      setCurrentUser={setCurrentUser}
+                      setIsLoggedIn={setIsLoggedIn}
+                    />
+                  </>
+                }
+                isLoggedIn={isLoggedIn}
+              />
             }
           />
           <Route path="*" element={<NotFound />} />

@@ -85,6 +85,17 @@
   background-color: rgba(52, 86, 243, 0.7);
 }
 
+.register__button_disabled {
+  background-color: #F8F8F8;
+  color: #C2C2C2;
+}
+
+.register__button_disabled:hover {
+  background-color: #F8F8F8;
+  color: #C2C2C2;
+  cursor: auto;
+}
+
 .register__registred {
   display: flex;
   gap: 6px;

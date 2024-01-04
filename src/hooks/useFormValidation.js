@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 export default function useFormValidation() {
   const [values, setValues] = useState({});
@@ -9,7 +9,6 @@ export default function useFormValidation() {
     const input = evt.target;
     const value = input.value;
     const name = input.name;
-    console.log(input.value)
 
     setValues({ ...values, [name]: value });
     setErrors({ ...errors, [name]: input.validationMessage });

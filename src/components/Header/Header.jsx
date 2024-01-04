@@ -1,5 +1,4 @@
 import Navigation from "../Navigation/Navigation";
-import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./Header.css";
 import logo from "../../images/logo.svg";
@@ -11,10 +10,8 @@ export default function Header({
   isLoggedIn,
   isMobile,
   handleBurgerClick,
-  handleLogin,
   handleMobileMenuClick,
 }) {
-  // const [isLoggedIn, setIsLoggedIn] = useState(true); //надо поменять на false, чтобы увидеть неавторизованной главную страницу
 
   const navigate = useNavigate();
 

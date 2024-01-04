@@ -7,51 +7,66 @@ import Preloader from "../Preloader/Preloader";
 import * as mainApi from "../../utils/MainApi";
 
 export default function SavedMovies() {
-  const [films, setFilms] = useState([]);
-  const [foundSavedMovies, setFoundSavedMovies] = useState([]);
-  const [isSearched, setIsSearched] = useState(false);
+  const [savedMovies, setSavedMovies] = useState([]);
   const [isLoadingFilms, setIsLoadingFilms] = useState(true);
+  const [isShort, setIsShort] = useState(false);
+  const [isNothingFound, setIsNothingFound] = useState(false);
+  const [isSearch, setIsSearch] = useState(false);
 
   const currentUser = useContext(CurrentUserContext);
 
   useEffect(() => {
     mainApi
       .getSavedMovies()
-      .then((movies) =>
-        movies.filter((movie) => movie.owner === currentUser._id)
+      .then((savedMovies) =>
+        savedMovies.filter((savedMovie) => savedMovie.owner === currentUser._id)
       )
-      .then((userSavedMovies) => setFilms(userSavedMovies))
+      .then((filteredMovies) => {
+        setSavedMovies(filteredMovies);
+        localStorage.setItem("savedMovies", JSON.stringify(filteredMovies));
+      })
       .finally(setIsLoadingFilms(false));
   }, []);
 
   const updateSavedFilms = () => {
     mainApi
       .getSavedMovies()
-      .then((movies) => setFilms(movies))
+      .then((movies) => setSavedMovies(movies))
       .finally(setIsLoadingFilms(false));
   };
 
-  const findSavedMovies = (query, isShort) => {
-    const filtredMovies = films.filter((movie) => {
-      return isShort
-        ? movie.nameRU.toLowerCase().includes(query.toLowerCase()) &&
-            movie.duration <= 40
-        : movie.nameRU.toLowerCase().includes(query.toLowerCase());
-    });
-    setFoundSavedMovies(filtredMovies);
-    setIsSearched(true);
+  const findSavedMovies = (query) => {
+    setIsSearch(true);
+    const savedMovies = JSON.parse(localStorage.getItem("savedMovies"));
+    const filteredMovies = savedMovies.filter((movie) =>
+      movie.nameRU.toLowerCase().includes(query.toLowerCase())
+    );
+    if (filteredMovies.length === 0) {
+      setIsNothingFound(true);
+    } else {
+      setIsNothingFound(false);
+    }
+    setSavedMovies(filteredMovies);
   };
-
-  console.log(films)
 
   return (
     <main className="saved-movies">
-      <SearchForm findMovies={findSavedMovies} films={films} isSaved={true} />
+      <SearchForm
+        findMovies={findSavedMovies}
+        isSaved={true}
+        isShort={isShort}
+        setIsShort={setIsShort}
+      />
       {isLoadingFilms ? (
         <Preloader />
       ) : (
         <MoviesCardList
-          films={isSearched ? foundSavedMovies : films}
+          isNothingFound={isNothingFound}
+          setIsNothingFound={setIsNothingFound}
+          isSearch={isSearch}
+          isShort={isShort}
+          setIsShort={setIsShort}
+          movies={savedMovies}
           isSavedMovies={true}
           onDelete={updateSavedFilms}
         />

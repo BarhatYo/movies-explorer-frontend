@@ -3,16 +3,30 @@ import "./MoviesCardList.css";
 import MoviesCard from "../MoviesCard/MoviesCard";
 
 export default function MoviesCardList({
-  films,
+  movies,
   isSavedMovies,
   onDelete,
-  getAllMovies,
+  updateMoviesAfterLike,
+  isShort,
+  isNothingFound,
+  setIsNothingFound,
+  isSearch
 }) {
   const [visibleCards, setVisibleCards] = useState(undefined);
-  const [loadMore, setLoadMore] = useState(films.length > visibleCards);
+  const [loadMore, setLoadMore] = useState(undefined);
   const [cardsPerPage, setCardsPerPage] = useState(undefined);
 
-  const filmsToShow = films.slice(0, visibleCards);
+  const filteredMovies = isShort
+    ? movies.filter((movie) => movie.duration < 40)
+    : movies;
+
+  useEffect(() => {
+    if (isShort && isSearch) {
+      setIsNothingFound(isShort && filteredMovies.length === 0);
+    } else if (isSearch) {
+      setIsNothingFound(filteredMovies.length === 0);
+    }
+  }, [isSearch, isShort, filteredMovies.length]);
 
   useEffect(() => {
     if (isSavedMovies) {
@@ -29,10 +43,8 @@ export default function MoviesCardList({
         setCardsPerPage(5);
       }
 
-      setTimeout(() => {
-        setVisibleCards(cardsPerPage);
-        setLoadMore(cardsPerPage < films.length);
-      }, 1000);
+      setVisibleCards(cardsPerPage);
+      setLoadMore(cardsPerPage < filteredMovies.length);
     };
 
     handleResize();
@@ -42,73 +54,79 @@ export default function MoviesCardList({
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [cardsPerPage, films.length, isSavedMovies]);
+  }, [cardsPerPage, filteredMovies.length, isSavedMovies]);
 
   const handleShowMore = () => {
     const newVisibleCards = visibleCards + cardsPerPage;
     setVisibleCards(newVisibleCards);
-    setLoadMore(newVisibleCards < films.length);
+    setLoadMore(newVisibleCards < filteredMovies.length);
   };
 
   return (
     <>
-      <ul className="movies-card-list">
-        {filmsToShow.map((film) => (
-          <li
-            className="movies-card-list__item"
-            key={isSavedMovies ? film._id : film.id}
-          >
-            {isSavedMovies ? (
-              <MoviesCard
-                _id={film._id}
-                movieId={film.id}
-                nameRU={film.nameRU}
-                nameEN={film.nameEN}
-                director={film.director}
-                country={film.country}
-                year={film.year}
-                duration={film.duration}
-                description={film.description}
-                trailerLink={film.trailerLink}
-                thumbNail={film.thumbNail}
-                image={film.image}
-                isLiked={film.isLiked}
-                isSavedMovies={isSavedMovies}
-                onDelete={onDelete}
-              />
-            ) : (
-              <MoviesCard
-                _id={film._id}
-                movieId={film.id}
-                nameRU={film.nameRU}
-                nameEN={film.nameEN}
-                director={film.director}
-                country={film.country}
-                year={film.year}
-                duration={film.duration}
-                description={film.description}
-                trailerLink={film.trailerLink}
-                thumbNail={
-                  "https://api.nomoreparties.co" +
-                  film.image.formats.thumbnail.url
-                }
-                image={"https://api.nomoreparties.co" + film.image.url}
-                isLiked={film.isLiked}
-                isSavedMovies={isSavedMovies}
-                getAllMovies={getAllMovies}
-              />
-            )}
-          </li>
-        ))}
-      </ul>
-      {loadMore && (
-        <button
-          className="movies-more-button"
-          onClick={handleShowMore}
-          type="button"
-        >
-          Ещё
-        </button>
+      {isNothingFound ? (
+        <div className="movies-card-list__nothing">Ничего не найдено</div>
+      ) : (
+        <>
+          <ul className="movies-card-list">
+            {filteredMovies.slice(0, visibleCards).map((movie) => (
+              <li
+                className="movies-card-list__item"
+                key={isSavedMovies ? movie._id : movie.id}
+              >
+                {isSavedMovies ? (
+                  <MoviesCard
+                    _id={movie._id}
+                    movieId={movie.id}
+                    nameRU={movie.nameRU}
+                    nameEN={movie.nameEN}
+                    director={movie.director}
+                    country={movie.country}
+                    year={movie.year}
+                    duration={movie.duration}
+                    description={movie.description}
+                    trailerLink={movie.trailerLink}
+                    thumbNail={movie.thumbNail}
+                    image={movie.image}
+                    isLiked={movie.isLiked}
+                    isSavedMovies={isSavedMovies}
+                    onDelete={onDelete}
+                  />
+                ) : (
+                  <MoviesCard
+                    _id={movie._id}
+                    movieId={movie.id}
+                    nameRU={movie.nameRU}
+                    nameEN={movie.nameEN}
+                    director={movie.director}
+                    country={movie.country}
+                    year={movie.year}
+                    duration={movie.duration}
+                    description={movie.description}
+                    trailerLink={movie.trailerLink}
+                    thumbNail={
+                      "https://api.nomoreparties.co" +
+                      movie.image.formats.thumbnail.url
+                    }
+                    image={"https://api.nomoreparties.co" + movie.image.url}
+                    isLiked={movie.isLiked}
+                    isSavedMovies={isSavedMovies}
+                    updateMoviesAfterLike={updateMoviesAfterLike}
+                  />
+                )}
+              </li>
+            ))}
+          </ul>
+          {loadMore && (
+            <button
+              className="movies-more-button"
+              onClick={handleShowMore}
+              type="button"
+            >
+              Ещё
+            </button>
+          )}
+        </>
       )}
     </>
   );

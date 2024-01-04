@@ -21,10 +21,12 @@ export default function MoviesCard({
   isLiked,
   isSavedMovies,
   onDelete,
-  getAllMovies,
+  updateMoviesAfterLike,
 }) {
   const [isLikedState, setIsLikedState] = useState(isLiked);
   const [isHovered, setIsHovered] = useState(false);
+  const [id, setId] = useState(_id);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -34,25 +36,41 @@ export default function MoviesCard({
     setIsHovered(false);
   };
 
-  const handleLike = (card) => {
+  const handleLike = (movie) => {
+    setIsButtonDisabled(true);
     setIsLikedState(true);
-    mainApi.addMovie(card);
-    getAllMovies();
+    mainApi
+      .addMovie(movie)
+      .then((movie) => setId(movie._id))
+      .catch((error) => console.log(error))
+      .finally(() => {
+        setIsButtonDisabled(false);
+        updateMoviesAfterLike();
+      });
   };
 
   const handleDislike = (id) => {
-    mainApi.removeSavedMovie(id).then(onDelete);
-    setIsLikedState(false);
-    getAllMovies();
+    setIsButtonDisabled(true);
+    mainApi
+      .removeSavedMovie(id)
+      .catch((error) => console.log(error))
+      .finally(() => {
+        setIsButtonDisabled(false);
+        setIsLikedState(false);
+        updateMoviesAfterLike();
+      });
   };
 
-  const handleDislikeSavedMovies = (id) => {
+  const deleteSavedMovies = (id) => {
     mainApi.removeSavedMovie(id).then(onDelete);
   };
 
   return (
-    <div className="movies-card" onMouseEnter={handleMouseEnter}
-    onMouseLeave={handleMouseLeave}>
+    <div
+      className="movies-card"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
       <a
         className="movies-card__image-wrapper"
         href={trailerLink}
@@ -68,9 +86,9 @@ export default function MoviesCard({
             className={`movies-card__like ${
               !isHovered ? "movies-card__like_invisible" : ""
             }`}
-            onClick={() => handleDislikeSavedMovies(_id)}
-            
+            onClick={() => deleteSavedMovies(id)}
             type="button"
+            disabled={isButtonDisabled}
           >
             <img className="movies-card__like-icon" src={cross} alt="Лайк" />
           </button>
@@ -79,7 +97,7 @@ export default function MoviesCard({
             className="movies-card__like"
             onClick={() =>
               isLikedState
-                ? handleDislike(_id)
+                ? handleDislike(id)
                 : handleLike({
                     movieId,
                     nameRU,
@@ -95,6 +113,7 @@ export default function MoviesCard({
                   })
             }
             type="button"
+            disabled={isButtonDisabled}
           >
             <img
               className="movies-card__like-icon"

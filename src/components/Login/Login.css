@@ -87,6 +87,12 @@
   color: #C2C2C2;
 }
 
+.login__button_disabled:hover {
+  background-color: #F8F8F8;
+  color: #C2C2C2;
+  cursor: auto;
+}
+
 .login__not-registred {
   display: flex;
   gap: 6px;

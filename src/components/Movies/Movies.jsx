@@ -8,78 +8,129 @@ import * as moviesApi from "../../utils/MoviesApi";
 import * as mainApi from "../../utils/MainApi";
 
 export default function Movies() {
-  const [films, setFilms] = useState([]);
-  const [savedFilms, setSavedFilms] = useState([]);
-  const [foundMovies, setFoundMovies] = useState([]);
-  const [isLoadingFilms, setIsLoadingFilms] = useState(true);
-  const [isLoadingSavedFilms, setIsLoadingSavedFilms] = useState(true);
+  const [isLoadingMovies, setIsLoadingMovies] = useState(false);
+  const [isLoadingSavedMovies, setIsLoadingSavedMovies] = useState(false);
+  const [movies, setMovies] = useState([]);
+  const [isShort, setIsShort] = useState(localStorage.getItem('isShort') === 'true' || false);
+  const [isNothingFound, setIsNothingFound] = useState(false);
+  const [isSearch, setIsSearch] = useState(false);
 
   const currentUser = useContext(CurrentUserContext);
 
-  useEffect(() => {
-    getAllMovies();
-  }, []);
+  const getCurrentUserSavedMovies = () => {
+    return mainApi.getSavedMovies().then((movies) => {
+      if (movies.length === 0) {
+        return [];
+      }
+      const filtredMovies = movies.filter(
+        (movie) => movie.owner === currentUser._id
+      );
+      return filtredMovies;
+    });
+  };
 
-  const getAllMovies = () => {
+  const findMovies = (query) => {
+    setIsLoadingMovies(true);
+    setIsLoadingSavedMovies(true);
+    setIsSearch(true);
+
     moviesApi
       .getMovies()
-      .then((films) => setFilms(films))
-      .catch((error) => {
-        console.error('Error fetching movies:', error);
+      .then((movies) => {
+        const foundMovies = movies.filter((movie) =>
+          movie.nameRU.toLowerCase().includes(query.toLowerCase())
+        );
+        if (foundMovies.length === 0) {
+          setIsNothingFound(true);
+        } else {
+          setIsNothingFound(false);
+        }
+        localStorage.setItem(
+          "foundMoviesFromBeatFilm",
+          JSON.stringify(foundMovies)
+        );
+        localStorage.setItem("lastSearch", query);
+        return getCurrentUserSavedMovies();
       })
-      .finally(setIsLoadingFilms(false));
-    mainApi
-      .getSavedMovies()
-      .then((savedFilms) => setSavedFilms(savedFilms))
-      .catch((error) => {
-        console.error('Error fetching movies:', error);
+      .then((savedMovies) => {
+        updateMovies(savedMovies);
       })
-      .finally(setIsLoadingSavedFilms(false));
+      .catch((error) => {
+        console.error("При загрузке фильмов произошла ошибка", error);
+      })
+      .finally(() => {
+        setIsLoadingMovies(false);
+        setIsLoadingSavedMovies(false);
+      });
   };
 
-  const updatedFilms = films.map((film) => {
-    const savedFilm = savedFilms.find(
-      (saved) => saved.movieId === film.id && saved.owner === currentUser._id
+  const updateMovies = (filtredMovies) => {
+    const foundMoviesFromBeatFilm = JSON.parse(
+      localStorage.getItem("foundMoviesFromBeatFilm")
     );
+    if (filtredMovies && filtredMovies.length > 0) {
+      const updatedMovies = foundMoviesFromBeatFilm.map((movie) => {
+        const savedMovie = filtredMovies.find(
+          (filtredMovie) =>
+            filtredMovie.movieId === movie.id &&
+            filtredMovie.owner === currentUser._id
+        );
 
-    if (savedFilm) {
-      return {
-        ...film,
-        owner: savedFilm.owner,
-        _id: savedFilm._id,
-        isLiked: true,
-      };
+        if (savedMovie) {
+          return {
+            ...movie,
+            owner: savedMovie.owner,
+            _id: savedMovie._id,
+            isLiked: true,
+          };
+        } else {
+          return {
+            ...movie,
+            owner: undefined,
+            _id: undefined,
+            isLiked: false,
+          };
+        }
+      });
+      setMovies(updatedMovies);
+    } else {
+      setMovies(foundMoviesFromBeatFilm);
     }
-
-    return {
-      ...film,
-      owner: null,
-      _id: null,
-      isLiked: false,
-    };
-  });
-
-  const findMovies = (query, isShort) => {
-    const filtredFilms = updatedFilms.filter((film) => {
-      return isShort
-        ? film.nameRU.toLowerCase().includes(query.toLowerCase()) &&
-            film.duration <= 40
-        : film.nameRU.toLowerCase().includes(query.toLowerCase());
-    });
-    setFoundMovies(filtredFilms);
-    localStorage.setItem("lastSearch", JSON.stringify({ query, isShort }));
   };
+
+  const updateMoviesAfterLike = () => {
+    getCurrentUserSavedMovies().then((filtredMovies) =>
+      updateMovies(filtredMovies)
+    );
+  };
+
+  useEffect(() => {
+    if (localStorage.getItem("lastSearch") && localStorage.getItem("token")) {
+      getCurrentUserSavedMovies().then((filteredMovies) =>
+        updateMovies(filteredMovies)
+      );
+    }
+  }, []);
 
   return (
     <main className="movies">
-      <SearchForm findMovies={findMovies} films={films} />
-      {isLoadingFilms || isLoadingSavedFilms ? (
+      <SearchForm
+        findMovies={findMovies}
+        movies={movies}
+        isShort={isShort}
+        setIsShort={setIsShort}
+      />
+      {isLoadingMovies || isLoadingSavedMovies ? (
         <Preloader />
       ) : (
         <MoviesCardList
-          films={foundMovies}
+          isNothingFound={isNothingFound}
+          setIsNothingFound={setIsNothingFound}
+          isSearch={isSearch}
+          movies={movies}
           isSavedMovies={false}
-          getAllMovies={getAllMovies}
+          isShort={isShort}
+          updateMoviesAfterLike={updateMoviesAfterLike}
         />
       )}
     </main>

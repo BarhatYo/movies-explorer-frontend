@@ -1,9 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Register.css";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../images/logo.svg";
+import useFormValidation from "../../hooks/useFormValidation.js";
+import * as mainApi from "../../utils/MainApi";
+import InfoPopup from "../InfoPopup/InfoPopup";
 
-export default function Register({ name, email, password, handleNameChange, handleEmailChange, handlePasswordChange, handleRegister }) {
+export default function Register({ setCurrentUser, setIsLoggedIn }) {
+  const [isPopup, setIsPopup] = useState(false);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const { values, errors, isValid, handleChange, resetForm } =
+    useFormValidation();
 
   const navigate = useNavigate();
 
@@ -11,8 +18,37 @@ export default function Register({ name, email, password, handleNameChange, hand
     navigate("/", { replace: true });
   };
 
+  const handleRegister = (e) => {
+    e.preventDefault();
+    setIsButtonDisabled(true);
+    mainApi.register(values.name, values.email, values.password)
+      .then((userInfo) => {
+        setCurrentUser(userInfo);
+        localStorage.setItem('currentUser', JSON.stringify(userInfo));
+        return mainApi.login(values.email, values.password);
+      })
+      .then(() => {
+        setIsLoggedIn(true);
+        localStorage.setItem('isLoggedIn', true);
+        setIsPopup(true);
+      })
+      .catch((error) => {
+        console.error('Ошибка регистрации или входа:', error);
+      })
+      .finally(() => setIsButtonDisabled(false));
+  };
+  
+
+  const handleClosePopup = () => {
+    setIsPopup(false);
+    navigate("/movies", { replace: true });
+  }
+
+  useEffect(() => {
+    resetForm({}, {}, true);
+  }, [resetForm])
+
   return (
-    // Тексты ошибок будет обновлены на следующем этапе после настройки логики регистрации/авторизации
     <main className="register">
       <div className="register__content">
         <div className="register__hello">
@@ -36,14 +72,14 @@ export default function Register({ name, email, password, handleNameChange, hand
             className="register__input"
             name="name"
             id="name"
-            value={name}
-            onChange={handleNameChange}
+            value={values.name || ""}
+            onChange={handleChange}
             minLength="2"
             maxLength="30"
             placeholder="Введите имя"
             required
           />
-          <span className="register__input-error">Текст ошибки</span>
+          <span className="register__input-error">{errors.name}</span>
           <label className="register__input-label" htmlFor="email">
             E-mail
           </label>
@@ -52,13 +88,14 @@ export default function Register({ name, email, password, handleNameChange, hand
             name="email"
             type="email"
             id="email"
-            value={email}
-            onChange={handleEmailChange}
+            value={values.email || ""}
+            onChange={handleChange}
             minLength="2"
             placeholder="Введите email"
+            pattern="^\w+@\w+\.\w{2,}(\.\w{2,})*$"
             required
           />
-          <span className="register__input-error">Текст ошибки</span>
+          <span className="register__input-error">{errors.email}</span>
           <label className="register__input-label" htmlFor="password">
             Пароль
           </label>
@@ -67,15 +104,21 @@ export default function Register({ name, email, password, handleNameChange, hand
             name="password"
             type="password"
             id="password"
-            value={password}
+            value={values.password || ""}
             minLength="4"
             placeholder="Введите пароль"
-            onChange={handlePasswordChange}
+            onChange={handleChange}
             required
           />
-          <span className="register__input-error">Текст ошибки</span>
+          <span className="register__input-error">{errors.password}</span>
           <div className="register__action">
-            <button className="register__button">Зарегистрироваться</button>
+            <button
+              className={`register__button ${
+                !isValid ? "register__button_disabled" : ""
+              }`} disabled={isButtonDisabled}
+            >
+              Зарегистрироваться
+            </button>
             <div className="register__registred">
               <p className="register__registred-text">Уже зарегистрированы?</p>
               <Link to="/signin" className="register__login-link">
@@ -85,6 +128,7 @@ export default function Register({ name, email, password, handleNameChange, hand
           </div>
         </form>
       </div>
+      {isPopup && <InfoPopup title={'Регистрация успешна'} buttonText={'Отлично!'} onClick={handleClosePopup} />}
     </main>
   );
 }

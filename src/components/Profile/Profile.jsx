@@ -5,7 +5,7 @@ import "./Profile.css";
 import * as mainApi from "../../utils/MainApi";
 import useFormValidation from "../../hooks/useFormValidation.js";
 
-export default function Profile() {
+export default function Profile({ setCurrentUser, setIsLoggedIn }) {
   const [isEdit, setIsEdit] = useState(true);
   const [isError, setIsError] = useState(false);
 
@@ -14,14 +14,14 @@ export default function Profile() {
   const { values, errors, isValid, handleChange, resetForm } =
     useFormValidation();
 
-  const handleForm = () => {
+  const handleEdit = () => {
     setIsEdit(!isEdit);
   };
 
   useEffect(() => {
     setIsError(false);
   }, [values]);
-  
+
   useEffect(() => {
     if (currentUser) {
       resetForm(currentUser, {}, true);
@@ -32,14 +32,23 @@ export default function Profile() {
     e.preventDefault();
     mainApi
       .updateProfile(values.name, values.email)
-      .then(() => setIsEdit(!isEdit))
+      .then((newUserInfo) => {
+        setCurrentUser(newUserInfo);
+        localStorage.setItem("currentUser", JSON.stringify(newUserInfo));
+        setIsEdit(!isEdit);
+      })
       .catch(() => setIsError(true));
   };
 
   const handleExit = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("lastSearch");
-    localStorage.setItem('isLoggedIn', false);
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("savedMovies");
+    localStorage.removeItem("foundMoviesFromBeatFilm");
+    localStorage.removeItem("currentUser");
+    localStorage.removeItem("isShort");
+    setIsLoggedIn(false);
     navigate("/", { replace: true });
   };
 
@@ -47,9 +56,7 @@ export default function Profile() {
 
   return (
     <main className="profile">
-      <h1 className="profile__hello">
-        Привет, {values.name || currentUser.name}!
-      </h1>
+      <h1 className="profile__hello">Привет, {currentUser.name}!</h1>
       {isEdit ? (
         <>
           <div className="profile__info">
@@ -69,7 +76,7 @@ export default function Profile() {
           <div className="profile__actions">
             <button
               className="profile__edit-button"
-              onClick={handleForm}
+              onClick={handleEdit}
               type="button"
             >
               Редактировать
@@ -116,6 +123,7 @@ export default function Profile() {
                 type="email"
                 onChange={handleChange}
                 minLength="2"
+                pattern="^\w+@\w+\.\w{2,}(\.\w{2,})*$"
                 placeholder="Введите email"
               />
             </div>
@@ -124,10 +132,20 @@ export default function Profile() {
             </span>
           </div>
           <div className="profile__save">
-            <span className={`profile__form-error ${!isError ? 'profile__form-error_hidden' : ''}`}>
+            <span
+              className={`profile__form-error ${
+                !isError ? "profile__form-error_hidden" : ""
+              }`}
+            >
               При обновлении профиля произошла ошибка.
             </span>
-            <button className={`profile__form-save-button ${!isValid ? 'profile__form-save-button_disabled' : ''} `}>Сохранить</button>
+            <button
+              className={`profile__form-save-button ${
+                !isValid ? "profile__form-save-button_disabled" : ""
+              } `}
+            >
+              Сохранить
+            </button>
           </div>
         </form>
       )}
