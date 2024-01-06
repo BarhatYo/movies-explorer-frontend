@@ -165,10 +165,14 @@ export default function App() {
           <Route
             path="/signin"
             element={
-              <Login
-                setIsLoggedIn={setIsLoggedIn}
-                setCurrentUser={setCurrentUser}
-              />
+              currentUser.name ? (
+                <Navigate to="/" />
+              ) : (
+                <Login
+                  setIsLoggedIn={setIsLoggedIn}
+                  setCurrentUser={setCurrentUser}
+                />
+              )
             }
           />
           <Route
