@@ -1,10 +1,12 @@
 import React from "react";
 import "./FilterCheckbox.css";
 
-export default function FilterCheckbox({ isShort, setIsShort }) {
+export default function FilterCheckbox({ isShort, setIsShort, isSaved }) {
   const handleCheckBox = () => {
-    localStorage.setItem("isShort", !isShort);
     setIsShort(!isShort);
+    if (!isSaved) {
+      localStorage.setItem("isShort", !isShort);
+    }
   };
 
   return (

@@ -5,11 +5,11 @@ import logo from "../../images/logo.svg";
 import useFormValidation from "../../hooks/useFormValidation";
 import * as mainApi from "../../utils/MainApi";
 import InfoPopup from "../InfoPopup/InfoPopup";
-import ErrorPopup from "../ErrorPopup/ErrorPopup";
 
 export default function Login({ setIsLoggedIn, setCurrentUser }) {
   const [isInfoPopup, setIsInfoPopup] = useState(false);
-  const [isErrorPopup, setIsErrorPopup] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const { values, errors, isValid, handleChange, resetForm } =
     useFormValidation();
@@ -28,32 +28,24 @@ export default function Login({ setIsLoggedIn, setCurrentUser }) {
       .then(() => {
         setIsLoggedIn(true);
         localStorage.setItem("isLoggedIn", true);
-        mainApi
-          .getProfile()
-          .then((currentUserInfo) => {
-            setCurrentUser(currentUserInfo);
-            localStorage.setItem(
-              "currentUser",
-              JSON.stringify(currentUserInfo)
-            );
-            setIsInfoPopup(true);
-          })
-          .catch((error) => console.log(error));
+        setIsInfoPopup(true);
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
-        setIsErrorPopup(true);
+        if (error.code === 401) {
+          setErrorMessage("Вы ввели неправильный логин или пароль.");
+        }
+        setIsError(true);
+        setErrorMessage(
+          "При авторизации произошла ошибка. Переданный токен некорректен."
+        );
       })
-      .finally(() => setIsButtonDisabled(false))
+      .finally(() => setIsButtonDisabled(false));
   };
 
   const handleCloseInfoPopup = () => {
     setIsInfoPopup(false);
     navigate("/movies", { replace: true });
-  };
-
-  const handleCloseErrorPopup = () => {
-    setIsErrorPopup(false);
   };
 
   useEffect(() => {
@@ -105,10 +97,16 @@ export default function Login({ setIsLoggedIn, setCurrentUser }) {
           />
           <span className="login__input-error">{errors.password}</span>
           <div className="login__action">
+            <span
+              className={`login__error ${isError ? "login__error_active" : ""}`}
+            >
+              {errorMessage}
+            </span>
             <button
               className={`login__button ${
                 !isValid ? "login__button_disabled" : ""
-              }`} disabled={isButtonDisabled}
+              }`}
+              disabled={isButtonDisabled}
             >
               Войти
             </button>
@@ -130,7 +128,6 @@ export default function Login({ setIsLoggedIn, setCurrentUser }) {
           onClick={handleCloseInfoPopup}
         />
       )}
-      {isErrorPopup && <ErrorPopup title={"Неправильный логин или пароль"} buttonText={"Закрыть"} onClick={handleCloseErrorPopup} /> }
     </main>
   );
 }

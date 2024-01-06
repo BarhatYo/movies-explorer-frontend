@@ -5,28 +5,28 @@ import MoviesCard from "../MoviesCard/MoviesCard";
 export default function MoviesCardList({
   movies,
   isSavedMovies,
-  onDelete,
-  updateMoviesAfterLike,
   isShort,
-  isNothingFound,
-  setIsNothingFound,
-  isSearch
+  searched,
+  setSavedMovies,
+  setFoundSavedMovies,
+  isLoadingError,
 }) {
   const [visibleCards, setVisibleCards] = useState(undefined);
-  const [loadMore, setLoadMore] = useState(undefined);
-  const [cardsPerPage, setCardsPerPage] = useState(undefined);
+  const [loadMore, setLoadMore] = useState(false);
+  const [cardsPerPage, setCardsPerPage] = useState(0);
+  const [isNothingFound, setIsNothingFound] = useState(false);
 
   const filteredMovies = isShort
     ? movies.filter((movie) => movie.duration < 40)
     : movies;
 
   useEffect(() => {
-    if (isShort && isSearch) {
-      setIsNothingFound(isShort && filteredMovies.length === 0);
-    } else if (isSearch) {
+    if (searched) {
+      setIsNothingFound(filteredMovies.length === 0);
+    } else if (isSavedMovies) {
       setIsNothingFound(filteredMovies.length === 0);
     }
-  }, [isSearch, isShort, filteredMovies.length]);
+  }, [searched, isSavedMovies, isShort, filteredMovies.length]);
 
   useEffect(() => {
     if (isSavedMovies) {
@@ -64,7 +64,12 @@ export default function MoviesCardList({
 
   return (
     <>
-      {isNothingFound ? (
+      {isLoadingError ? (
+        <div className="movies-card-list__error">
+          Во время запроса произошла ошибка. Возможно, проблема с соединением
+          или сервер недоступен. Подождите немного и попробуйте ещё раз
+        </div>
+      ) : isNothingFound ? (
         <div className="movies-card-list__nothing">Ничего не найдено</div>
       ) : (
         <>
@@ -90,7 +95,8 @@ export default function MoviesCardList({
                     image={movie.image}
                     isLiked={movie.isLiked}
                     isSavedMovies={isSavedMovies}
-                    onDelete={onDelete}
+                    setSavedMovies={setSavedMovies}
+                    setFoundSavedMovies={setFoundSavedMovies}
                   />
                 ) : (
                   <MoviesCard
@@ -111,7 +117,7 @@ export default function MoviesCardList({
                     image={"https://api.nomoreparties.co" + movie.image.url}
                     isLiked={movie.isLiked}
                     isSavedMovies={isSavedMovies}
-                    updateMoviesAfterLike={updateMoviesAfterLike}
+                    setSavedMovies={setSavedMovies}
                   />
                 )}
               </li>

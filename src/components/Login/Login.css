@@ -64,8 +64,24 @@
   
 }
 
-.login__button {
+.login__action {
   margin-top: 200px;
+}
+
+.login__error {
+  display: block;
+  visibility: hidden;
+  margin-bottom: 20px;
+  font-size: 11px;
+  color: #FF004C;
+  text-align: center;
+}
+
+.login__error_active {
+  visibility: visible;
+}
+
+.login__button {
   height: 45px;
   border-radius: 3px;
   border: none;

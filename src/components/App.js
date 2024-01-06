@@ -12,28 +12,115 @@ import Profile from "./Profile/Profile";
 import SavedMovies from "./SavedMovies/SavedMovies";
 import ProtectedRoute from "./ProtectedRoute";
 import * as mainApi from "../utils/MainApi";
+import * as moviesApi from "../utils/MoviesApi";
 
 export default function App() {
   const [isMobile, setIsMobile] = useState(false);
-  const [currentUser, setCurrentUser] = useState(
-    JSON.parse(localStorage.getItem("currentUser")) || {}
-  );
+  const [currentUser, setCurrentUser] = useState({});
   const [isLoggedIn, setIsLoggedIn] = useState(
     localStorage.getItem("isLoggedIn") || false
   );
+  const [isLoadingMovies, setIsLoadingMovies] = useState(false);
+  const [isLoadingError, setIsLoadingError] = useState(false);
+  const [searched, setSearched] = useState(false);
+
+  const [movies, setMovies] = useState(
+    JSON.parse(localStorage.getItem("movies")) || []
+  );
+  const [savedMovies, setSavedMovies] = useState([]);
+  const [foundMovies, setFoundMovies] = useState([]);
+
+  const [query, setQuery] = useState(localStorage.getItem("query") || "");
 
   const token = localStorage.getItem("token");
+
+  // Получение и обработка фильмов
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      Promise.all([mainApi.getProfile(), mainApi.getSavedMovies()])
+        .then(([profile, savedMovies]) => {
+          setCurrentUser(profile);
+          setSavedMovies(savedMovies);
+        })
+        .catch(() => setIsLoadingError(true));
+    }
+  }, [isLoggedIn]);
+
+  useEffect(() => {
+    if (movies.length > 0) {
+      const updatedMovies = updateMovies(movies);
+      const foundMovies = filterSearch(updatedMovies, query);
+      setFoundMovies(foundMovies);
+    }
+  }, [savedMovies]);
+
+  useEffect(() => {
+    if (query && movies.length > 0) {
+      const foundMovies = filterSearch(movies, query);
+      setFoundMovies(foundMovies);
+    }
+  }, [query, movies]);
+
+  const getAllMovies = () => {
+    setIsLoadingMovies(true);
+    moviesApi
+      .getMovies()
+      .then((movies) => {
+        updateMovies(movies);
+      })
+      .catch(() => setIsLoadingError(true))
+      .finally(() => setIsLoadingMovies(false));
+  };
+
+  const updateMovies = (movies) => {
+    const updatedMovies = movies.map((movie) => {
+      const savedMovie = savedMovies.find((userSavedMovie) => {
+        return userSavedMovie.movieId === movie.id;
+      });
+
+      if (savedMovie) {
+        return {
+          ...movie,
+          owner: savedMovie.owner,
+          _id: savedMovie._id,
+          isLiked: true,
+        };
+      } else {
+        return {
+          ...movie,
+          owner: null,
+          _id: null,
+          isLiked: false,
+        };
+      }
+    });
+    localStorage.setItem("movies", JSON.stringify(updatedMovies));
+    setMovies(updatedMovies);
+    return updatedMovies;
+  };
+
+  const handleSearch = (query) => {
+    setQuery(query);
+    localStorage.setItem("query", query);
+    setSearched(true);
+    if (movies.length === 0) {
+      getAllMovies();
+    }
+  };
+
+  const filterSearch = (movies, query) =>
+    movies.filter((movie) =>
+      movie.nameRU.toLowerCase().includes(query.toLowerCase())
+    );
+
+  // Проверка токена
 
   useEffect(() => {
     if (token) {
       handleTokenCheck(token);
     } else {
-      localStorage.removeItem("token");
-      localStorage.removeItem("lastSearch");
-      localStorage.removeItem("isLoggedIn");
-      localStorage.removeItem("savedMovies");
-      localStorage.removeItem("foundMoviesFromBeatFilm");
-      localStorage.removeItem("currentUser");
+      localStorage.clear();
     }
   }, [token]);
 
@@ -47,6 +134,8 @@ export default function App() {
         .catch((err) => console.log(err));
     }
   };
+
+  // Мобильное меню
 
   const handleBurgerClick = () => {
     setIsMobile(!isMobile);
@@ -63,10 +152,14 @@ export default function App() {
           <Route
             path="/signup"
             element={
-              <Register
-                setCurrentUser={setCurrentUser}
-                setIsLoggedIn={setIsLoggedIn}
-              />
+              currentUser.name ? (
+                <Navigate to="/" />
+              ) : (
+                <Register
+                  setCurrentUser={setCurrentUser}
+                  setIsLoggedIn={setIsLoggedIn}
+                />
+              )
             }
           />
           <Route
@@ -105,7 +198,14 @@ export default function App() {
                       handleBurgerClick={handleBurgerClick}
                       handleMobileMenuClick={handleMobileMenuClick}
                     />
-                    <Movies />
+                    <Movies
+                      searched={searched}
+                      movies={foundMovies}
+                      handleSearch={handleSearch}
+                      setSavedMovies={setSavedMovies}
+                      isLoadingMovies={isLoadingMovies}
+                      isLoadingError={isLoadingError}
+                    />
                     <Footer />
                   </>
                 }
@@ -125,7 +225,10 @@ export default function App() {
                       handleBurgerClick={handleBurgerClick}
                       handleMobileMenuClick={handleMobileMenuClick}
                     />
-                    <SavedMovies />
+                    <SavedMovies
+                      savedMovies={savedMovies}
+                      setSavedMovies={setSavedMovies}
+                    />
                     <Footer />
                   </>
                 }

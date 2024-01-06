@@ -9,6 +9,8 @@ import InfoPopup from "../InfoPopup/InfoPopup";
 export default function Register({ setCurrentUser, setIsLoggedIn }) {
   const [isPopup, setIsPopup] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const { values, errors, isValid, handleChange, resetForm } =
     useFormValidation();
 
@@ -21,32 +23,35 @@ export default function Register({ setCurrentUser, setIsLoggedIn }) {
   const handleRegister = (e) => {
     e.preventDefault();
     setIsButtonDisabled(true);
-    mainApi.register(values.name, values.email, values.password)
-      .then((userInfo) => {
-        setCurrentUser(userInfo);
-        localStorage.setItem('currentUser', JSON.stringify(userInfo));
+    mainApi
+      .register(values.name, values.email, values.password)
+      .then(() => {
         return mainApi.login(values.email, values.password);
       })
       .then(() => {
         setIsLoggedIn(true);
-        localStorage.setItem('isLoggedIn', true);
+        localStorage.setItem("isLoggedIn", true);
         setIsPopup(true);
       })
       .catch((error) => {
-        console.error('Ошибка регистрации или входа:', error);
+        console.log(error);
+        if (error.code === 409) {
+          setErrorMessage("Пользователь с таким email уже существует.");
+        }
+        setIsError(true);
+        setErrorMessage("При регистрации пользователя произошла ошибка.");
       })
       .finally(() => setIsButtonDisabled(false));
   };
-  
 
   const handleClosePopup = () => {
     setIsPopup(false);
     navigate("/movies", { replace: true });
-  }
+  };
 
   useEffect(() => {
     resetForm({}, {}, true);
-  }, [resetForm])
+  }, [resetForm]);
 
   return (
     <main className="register">
@@ -64,6 +69,7 @@ export default function Register({ setCurrentUser, setIsLoggedIn }) {
           className="register__form"
           name="register__form"
           onSubmit={handleRegister}
+          noValidate
         >
           <label className="register__input-label" htmlFor="name">
             Имя
@@ -75,7 +81,7 @@ export default function Register({ setCurrentUser, setIsLoggedIn }) {
             value={values.name || ""}
             onChange={handleChange}
             minLength="2"
-            maxLength="30"
+            maxLength="50"
             placeholder="Введите имя"
             required
           />
@@ -112,10 +118,18 @@ export default function Register({ setCurrentUser, setIsLoggedIn }) {
           />
           <span className="register__input-error">{errors.password}</span>
           <div className="register__action">
+            <span
+              className={`register__error ${
+                isError ? "register__error_active" : ""
+              }`}
+            >
+              {errorMessage}
+            </span>
             <button
               className={`register__button ${
                 !isValid ? "register__button_disabled" : ""
-              }`} disabled={isButtonDisabled}
+              }`}
+              disabled={isButtonDisabled}
             >
               Зарегистрироваться
             </button>
@@ -128,7 +142,13 @@ export default function Register({ setCurrentUser, setIsLoggedIn }) {
           </div>
         </form>
       </div>
-      {isPopup && <InfoPopup title={'Регистрация успешна'} buttonText={'Отлично!'} onClick={handleClosePopup} />}
+      {isPopup && (
+        <InfoPopup
+          title={"Регистрация успешна"}
+          buttonText={"Отлично!"}
+          onClick={handleClosePopup}
+        />
+      )}
     </main>
   );
 }

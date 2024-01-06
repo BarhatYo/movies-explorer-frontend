@@ -8,6 +8,7 @@ import useFormValidation from "../../hooks/useFormValidation.js";
 export default function Profile({ setCurrentUser, setIsLoggedIn }) {
   const [isEdit, setIsEdit] = useState(true);
   const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const currentUser = useContext(CurrentUserContext);
 
@@ -37,17 +38,18 @@ export default function Profile({ setCurrentUser, setIsLoggedIn }) {
         localStorage.setItem("currentUser", JSON.stringify(newUserInfo));
         setIsEdit(!isEdit);
       })
-      .catch(() => setIsError(true));
+      .catch((err) => {
+        setIsError(true);
+        console.log(err);
+        if (err.code === 409) {
+          setErrorMessage("Пользователь с таким email уже существует");
+        }
+        setErrorMessage("При обновлении профиля произошла ошибка.");
+      });
   };
 
   const handleExit = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("lastSearch");
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("savedMovies");
-    localStorage.removeItem("foundMoviesFromBeatFilm");
-    localStorage.removeItem("currentUser");
-    localStorage.removeItem("isShort");
+    localStorage.clear();
     setIsLoggedIn(false);
     navigate("/", { replace: true });
   };
@@ -95,6 +97,7 @@ export default function Profile({ setCurrentUser, setIsLoggedIn }) {
           className="profile__form"
           name="profile-form"
           onSubmit={handleSubmit}
+          noValidate
         >
           <div className="profile__form-name-field">
             <div className="profile__form-name-container">
@@ -105,7 +108,7 @@ export default function Profile({ setCurrentUser, setIsLoggedIn }) {
                 name="name"
                 onChange={handleChange}
                 minLength="2"
-                maxLength="30"
+                maxLength="50"
                 placeholder="Введите имя"
               />
             </div>
@@ -137,7 +140,7 @@ export default function Profile({ setCurrentUser, setIsLoggedIn }) {
                 !isError ? "profile__form-error_hidden" : ""
               }`}
             >
-              При обновлении профиля произошла ошибка.
+              {errorMessage}
             </span>
             <button
               className={`profile__form-save-button ${

@@ -20,8 +20,8 @@ export default function MoviesCard({
   image,
   isLiked,
   isSavedMovies,
-  onDelete,
-  updateMoviesAfterLike,
+  setSavedMovies,
+  setFoundSavedMovies,
 }) {
   const [isLikedState, setIsLikedState] = useState(isLiked);
   const [isHovered, setIsHovered] = useState(false);
@@ -41,28 +41,38 @@ export default function MoviesCard({
     setIsLikedState(true);
     mainApi
       .addMovie(movie)
-      .then((movie) => setId(movie._id))
+      .then((movie) => {
+        setId(movie._id);
+        setSavedMovies((prevSavedMovies) => [...prevSavedMovies, movie]);
+      })
       .catch((error) => console.log(error))
       .finally(() => {
         setIsButtonDisabled(false);
-        updateMoviesAfterLike();
       });
   };
 
   const handleDislike = (id) => {
     setIsButtonDisabled(true);
+    setIsLikedState(false);
+    setSavedMovies((prevSavedMovies) =>
+      prevSavedMovies.filter((movie) => movie._id !== id)
+    );
     mainApi
       .removeSavedMovie(id)
       .catch((error) => console.log(error))
       .finally(() => {
         setIsButtonDisabled(false);
-        setIsLikedState(false);
-        updateMoviesAfterLike();
       });
   };
 
   const deleteSavedMovies = (id) => {
-    mainApi.removeSavedMovie(id).then(onDelete);
+    setFoundSavedMovies((prevSavedMovies) =>
+      prevSavedMovies.filter((movie) => movie._id !== id)
+    );
+    setSavedMovies((prevSavedMovies) =>
+      prevSavedMovies.filter((movie) => movie._id !== id)
+    );
+    mainApi.removeSavedMovie(id).catch((err) => console.log(err));
   };
 
   return (

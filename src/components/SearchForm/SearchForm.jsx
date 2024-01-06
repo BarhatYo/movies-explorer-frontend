@@ -3,7 +3,7 @@ import "./SearchForm.css";
 import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
 
 export default function SearchForm({
-  findMovies,
+  handleSearch,
   isSaved,
   isShort,
   setIsShort,
@@ -17,18 +17,17 @@ export default function SearchForm({
       setInputError(true);
     } else {
       setInputError(false);
-      findMovies(query.trim());
+      handleSearch(query.trim());
     }
   };
-  
 
   useEffect(() => {
     if (isSaved) {
       return;
     }
-    const lastSearch = localStorage.getItem("lastSearch");
-    setQuery(lastSearch);
-  }, []);
+    const query = localStorage.getItem("query");
+    setQuery(query);
+  }, [isSaved]);
 
   return (
     <>
@@ -60,7 +59,11 @@ export default function SearchForm({
             Введите ключевое слово
           </span>
         )}
-        <FilterCheckbox isShort={isShort} setIsShort={setIsShort} />
+        <FilterCheckbox
+          isShort={isShort}
+          setIsShort={setIsShort}
+          isSaved={isSaved}
+        />
       </form>
     </>
   );
