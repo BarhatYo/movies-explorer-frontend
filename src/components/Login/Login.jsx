@@ -4,10 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import logo from "../../images/logo.svg";
 import useFormValidation from "../../hooks/useFormValidation";
 import * as mainApi from "../../utils/MainApi";
-import InfoPopup from "../InfoPopup/InfoPopup";
 
-export default function Login({ setIsLoggedIn, setCurrentUser }) {
-  const [isInfoPopup, setIsInfoPopup] = useState(false);
+export default function Login({ setIsLoggedIn, handleOpenPopup }) {
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
@@ -28,28 +26,25 @@ export default function Login({ setIsLoggedIn, setCurrentUser }) {
       .then(() => {
         setIsLoggedIn(true);
         localStorage.setItem("isLoggedIn", true);
-        setIsInfoPopup(true);
+        handleOpenPopup({ title: "Авторизация успешна", buttonText: "Супер!" });
+        navigate("/movies", { replace: true });
       })
       .catch((error) => {
         console.log(error);
-        if (error.code === 401) {
-          setErrorMessage("Вы ввели неправильный логин или пароль.");
-        }
         setIsError(true);
-        setErrorMessage(
-          "При авторизации произошла ошибка. Переданный токен некорректен."
-        );
+        if (error.includes("401")) {
+          setErrorMessage("Вы ввели неправильный логин или пароль.");
+        } else {
+          setErrorMessage(
+            "При авторизации произошла ошибка. Переданный токен некорректен."
+          );
+        }
       })
       .finally(() => setIsButtonDisabled(false));
   };
 
-  const handleCloseInfoPopup = () => {
-    setIsInfoPopup(false);
-    navigate("/movies", { replace: true });
-  };
-
   useEffect(() => {
-    resetForm({}, {}, true);
+    resetForm({}, {}, false);
   }, [resetForm]);
 
   return (
@@ -64,7 +59,12 @@ export default function Login({ setIsLoggedIn, setCurrentUser }) {
           />
           <h1 className="login__title">Рады видеть!</h1>
         </div>
-        <form className="login__form" name="login__form" onSubmit={handleLogin}>
+        <form
+          className="login__form"
+          name="login__form"
+          onSubmit={handleLogin}
+          noValidate
+        >
           <label className="login__input-label" htmlFor="email">
             E-mail
           </label>
@@ -104,9 +104,9 @@ export default function Login({ setIsLoggedIn, setCurrentUser }) {
             </span>
             <button
               className={`login__button ${
-                !isValid ? "login__button_disabled" : ""
+                !isValid || isButtonDisabled ? "login__button_disabled" : ""
               }`}
-              disabled={isButtonDisabled}
+              disabled={!isValid || isButtonDisabled}
             >
               Войти
             </button>
@@ -121,13 +121,6 @@ export default function Login({ setIsLoggedIn, setCurrentUser }) {
           </div>
         </form>
       </div>
-      {isInfoPopup && (
-        <InfoPopup
-          title={"Авторизация успешна"}
-          buttonText={"Супер"}
-          onClick={handleCloseInfoPopup}
-        />
-      )}
     </main>
   );
 }

@@ -4,10 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import logo from "../../images/logo.svg";
 import useFormValidation from "../../hooks/useFormValidation.js";
 import * as mainApi from "../../utils/MainApi";
-import InfoPopup from "../InfoPopup/InfoPopup";
 
-export default function Register({ setCurrentUser, setIsLoggedIn }) {
-  const [isPopup, setIsPopup] = useState(false);
+export default function Register({ setIsLoggedIn, handleOpenPopup }) {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -31,22 +29,22 @@ export default function Register({ setCurrentUser, setIsLoggedIn }) {
       .then(() => {
         setIsLoggedIn(true);
         localStorage.setItem("isLoggedIn", true);
-        setIsPopup(true);
+        handleOpenPopup({
+          title: "Регистрация успешна",
+          buttonText: "Отлично!",
+        });
+        navigate("/movies", { replace: true });
       })
       .catch((error) => {
         console.log(error);
-        if (error.code === 409) {
-          setErrorMessage("Пользователь с таким email уже существует.");
-        }
         setIsError(true);
-        setErrorMessage("При регистрации пользователя произошла ошибка.");
+        if (error.includes("409")) {
+          setErrorMessage("Пользователь с таким email уже существует.");
+        } else {
+          setErrorMessage("При регистрации пользователя произошла ошибка.");
+        }
       })
       .finally(() => setIsButtonDisabled(false));
-  };
-
-  const handleClosePopup = () => {
-    setIsPopup(false);
-    navigate("/movies", { replace: true });
   };
 
   useEffect(() => {
@@ -69,7 +67,6 @@ export default function Register({ setCurrentUser, setIsLoggedIn }) {
           className="register__form"
           name="register__form"
           onSubmit={handleRegister}
-          noValidate
         >
           <label className="register__input-label" htmlFor="name">
             Имя
@@ -81,7 +78,7 @@ export default function Register({ setCurrentUser, setIsLoggedIn }) {
             value={values.name || ""}
             onChange={handleChange}
             minLength="2"
-            maxLength="50"
+            maxLength="30"
             placeholder="Введите имя"
             required
           />
@@ -127,9 +124,9 @@ export default function Register({ setCurrentUser, setIsLoggedIn }) {
             </span>
             <button
               className={`register__button ${
-                !isValid ? "register__button_disabled" : ""
+                !isValid || isButtonDisabled ? "register__button_disabled" : ""
               }`}
-              disabled={isButtonDisabled}
+              disabled={!isValid || isButtonDisabled}
             >
               Зарегистрироваться
             </button>
@@ -142,13 +139,6 @@ export default function Register({ setCurrentUser, setIsLoggedIn }) {
           </div>
         </form>
       </div>
-      {isPopup && (
-        <InfoPopup
-          title={"Регистрация успешна"}
-          buttonText={"Отлично!"}
-          onClick={handleClosePopup}
-        />
-      )}
     </main>
   );
 }

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./MoviesCardList.css";
 import MoviesCard from "../MoviesCard/MoviesCard";
+import * as moviesSizes from '../../constants/moviesSizes';
 
 export default function MoviesCardList({
   movies,
@@ -16,8 +17,10 @@ export default function MoviesCardList({
   const [cardsPerPage, setCardsPerPage] = useState(0);
   const [isNothingFound, setIsNothingFound] = useState(false);
 
+  
+
   const filteredMovies = isShort
-    ? movies.filter((movie) => movie.duration < 40)
+    ? movies.filter((movie) => movie.duration < moviesSizes.SHORT_MOVIE_DURATION)
     : movies;
 
   useEffect(() => {
@@ -32,15 +35,15 @@ export default function MoviesCardList({
     if (isSavedMovies) {
       return;
     }
-    setVisibleCards(16);
+    setVisibleCards(moviesSizes.MOVIES_AMOUNT_LARGE);
     const handleResize = () => {
       const width = window.innerWidth;
-      if (width > 992) {
-        setCardsPerPage(16);
-      } else if (width > 576 && width <= 992) {
-        setCardsPerPage(8);
-      } else if (width <= 576) {
-        setCardsPerPage(5);
+      if (width > moviesSizes.DISPLAY_SIZE_MEDIUM) {
+        setCardsPerPage(moviesSizes.MOVIES_AMOUNT_LARGE);
+      } else if (width > moviesSizes.DISPLAY_SIZE_SMALL && width <= moviesSizes.DISPLAY_SIZE_MEDIUM) {
+        setCardsPerPage(moviesSizes.MOVIES_AMOUNT_MEDIUM);
+      } else if (width <= moviesSizes.DISPLAY_SIZE_SMALL) {
+        setCardsPerPage(moviesSizes.MOVIES_AMOUNT_SMALL);
       }
 
       setVisibleCards(cardsPerPage);

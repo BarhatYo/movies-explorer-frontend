@@ -9,11 +9,11 @@ export default function Profile({ setCurrentUser, setIsLoggedIn }) {
   const [isEdit, setIsEdit] = useState(true);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-
-  const currentUser = useContext(CurrentUserContext);
-
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const { values, errors, isValid, handleChange, resetForm } =
     useFormValidation();
+
+  const currentUser = useContext(CurrentUserContext);
 
   const handleEdit = () => {
     setIsEdit(!isEdit);
@@ -30,6 +30,7 @@ export default function Profile({ setCurrentUser, setIsLoggedIn }) {
   }, [currentUser, resetForm]);
 
   const handleSubmit = (e) => {
+    setIsButtonDisabled(true);
     e.preventDefault();
     mainApi
       .updateProfile(values.name, values.email)
@@ -38,14 +39,16 @@ export default function Profile({ setCurrentUser, setIsLoggedIn }) {
         localStorage.setItem("currentUser", JSON.stringify(newUserInfo));
         setIsEdit(!isEdit);
       })
-      .catch((err) => {
+      .catch((error) => {
         setIsError(true);
-        console.log(err);
-        if (err.code === 409) {
+        console.log(error);
+        if (error.includes("409")) {
           setErrorMessage("Пользователь с таким email уже существует");
+        } else {
+          setErrorMessage("При обновлении профиля произошла ошибка.");
         }
-        setErrorMessage("При обновлении профиля произошла ошибка.");
-      });
+      })
+      .finally(() => setIsButtonDisabled(false));
   };
 
   const handleExit = () => {
@@ -108,7 +111,7 @@ export default function Profile({ setCurrentUser, setIsLoggedIn }) {
                 name="name"
                 onChange={handleChange}
                 minLength="2"
-                maxLength="50"
+                maxLength="30"
                 placeholder="Введите имя"
               />
             </div>
@@ -144,8 +147,11 @@ export default function Profile({ setCurrentUser, setIsLoggedIn }) {
             </span>
             <button
               className={`profile__form-save-button ${
-                !isValid ? "profile__form-save-button_disabled" : ""
+                !isValid || isButtonDisabled
+                  ? "profile__form-save-button_disabled"
+                  : ""
               } `}
+              disabled={!isValid || isButtonDisabled}
             >
               Сохранить
             </button>

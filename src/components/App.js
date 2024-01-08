@@ -11,11 +11,14 @@ import Movies from "./Movies/Movies";
 import Profile from "./Profile/Profile";
 import SavedMovies from "./SavedMovies/SavedMovies";
 import ProtectedRoute from "./ProtectedRoute";
+import InfoPopup from "./InfoPopup/InfoPopup";
 import * as mainApi from "../utils/MainApi";
 import * as moviesApi from "../utils/MoviesApi";
 
 export default function App() {
   const [isMobile, setIsMobile] = useState(false);
+  const [isPopup, setIsPopup] = useState(false);
+  const [popupInfo, setPopupInfo] = useState({});
   const [currentUser, setCurrentUser] = useState({});
   const [isLoggedIn, setIsLoggedIn] = useState(
     localStorage.getItem("isLoggedIn") || false
@@ -48,7 +51,7 @@ export default function App() {
   }, [isLoggedIn]);
 
   useEffect(() => {
-    if (movies.length > 0) {
+    if (movies.length > 0 && savedMovies.length > 0) {
       const updatedMovies = updateMovies(movies);
       const foundMovies = filterSearch(updatedMovies, query);
       setFoundMovies(foundMovies);
@@ -135,6 +138,16 @@ export default function App() {
     }
   };
 
+  const handleOpenPopup = ({ title, buttonText }) => {
+    setIsPopup(true);
+    setPopupInfo({ title, buttonText });
+  };
+
+  const handleClosePopup = () => {
+    setIsPopup(false);
+    setPopupInfo({});
+  };
+
   // Мобильное меню
 
   const handleBurgerClick = () => {
@@ -152,12 +165,12 @@ export default function App() {
           <Route
             path="/signup"
             element={
-              currentUser.name ? (
+              isLoggedIn ? (
                 <Navigate to="/" />
               ) : (
                 <Register
-                  setCurrentUser={setCurrentUser}
                   setIsLoggedIn={setIsLoggedIn}
+                  handleOpenPopup={handleOpenPopup}
                 />
               )
             }
@@ -165,12 +178,12 @@ export default function App() {
           <Route
             path="/signin"
             element={
-              currentUser.name ? (
+              isLoggedIn ? (
                 <Navigate to="/" />
               ) : (
                 <Login
                   setIsLoggedIn={setIsLoggedIn}
-                  setCurrentUser={setCurrentUser}
+                  handleOpenPopup={handleOpenPopup}
                 />
               )
             }
@@ -264,6 +277,13 @@ export default function App() {
           />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        {isPopup && (
+          <InfoPopup
+            title={popupInfo.title}
+            buttonText={popupInfo.buttonText}
+            onClick={handleClosePopup}
+          />
+        )}
       </div>
     </CurrentUserContext.Provider>
   );

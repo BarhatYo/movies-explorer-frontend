@@ -38,12 +38,12 @@ export default function MoviesCard({
 
   const handleLike = (movie) => {
     setIsButtonDisabled(true);
-    setIsLikedState(true);
     mainApi
       .addMovie(movie)
       .then((movie) => {
         setId(movie._id);
         setSavedMovies((prevSavedMovies) => [...prevSavedMovies, movie]);
+        setIsLikedState(true);
       })
       .catch((error) => console.log(error))
       .finally(() => {
@@ -53,7 +53,6 @@ export default function MoviesCard({
 
   const handleDislike = (id) => {
     setIsButtonDisabled(true);
-    setIsLikedState(false);
     setSavedMovies((prevSavedMovies) =>
       prevSavedMovies.filter((movie) => movie._id !== id)
     );
@@ -62,6 +61,7 @@ export default function MoviesCard({
       .catch((error) => console.log(error))
       .finally(() => {
         setIsButtonDisabled(false);
+        setIsLikedState(false);
       });
   };
 
