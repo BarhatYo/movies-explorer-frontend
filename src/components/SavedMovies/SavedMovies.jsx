@@ -1,34 +1,36 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./SavedMovies.css";
 import SearchForm from "../SearchForm/SearchForm";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
-import filmsData from "../../constants/films.js";
 
-export default function SavedMovies() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [savedFilms, setSavedFilms] = useState(filmsData);
+export default function SavedMovies({ savedMovies, setSavedMovies, isNothingFound, setIsNothingFound }) {
+  const [isShort, setIsShort] = useState(false);
+  const [foundSavedMovies, setFoundSavedMovies] = useState(savedMovies);
 
-  useEffect(() => {
-    setSavedFilms(filmsData.filter((film) => film.isLiked));
-  }, []);
-
-  const handleSearch = (query) => {
-    setSearchQuery(query);
-    const filteredFilms = filmsData.filter((film) => 
-      film.name.toLowerCase().includes(query.toLowerCase())
+  const findSavedMovies = (query) => {
+    const foundMovies = savedMovies.filter((movie) =>
+      movie.nameRU.toLowerCase().includes(query.toLowerCase())
     );
-    setSavedFilms(filteredFilms);
+    setFoundSavedMovies(foundMovies);
   };
-
-  const handleUnsave = (id) => {
-    const updatedSavedMovies = savedFilms.filter((film) => film._id !== id);
-    setSavedFilms(updatedSavedMovies);
-  }
 
   return (
     <main className="saved-movies">
-      <SearchForm handleSearch={handleSearch} />
-      <MoviesCardList films={savedFilms} isSaved={true} onDelete={handleUnsave} />
+      <SearchForm
+        handleSearch={findSavedMovies}
+        isSaved={true}
+        isShort={isShort}
+        setIsShort={setIsShort}
+      />
+      <MoviesCardList
+        isShort={isShort}
+        movies={foundSavedMovies}
+        isSavedMovies={true}
+        setSavedMovies={setSavedMovies}
+        setFoundSavedMovies={setFoundSavedMovies}
+        isNothingFound={isNothingFound}
+        setIsNothingFound={setIsNothingFound}
+      />
     </main>
   );
 }
