@@ -26,6 +26,7 @@ export default function App() {
   const [isLoadingMovies, setIsLoadingMovies] = useState(false);
   const [isLoadingError, setIsLoadingError] = useState(false);
   const [searched, setSearched] = useState(false);
+  const [isNothingFound, setIsNothingFound] = useState(false);
 
   const [movies, setMovies] = useState(
     JSON.parse(localStorage.getItem("movies")) || []
@@ -216,6 +217,8 @@ export default function App() {
                       handleMobileMenuClick={handleMobileMenuClick}
                     />
                     <Movies
+                      isNothingFound={isNothingFound}
+                      setIsNothingFound={setIsNothingFound}
                       searched={searched}
                       movies={foundMovies}
                       handleSearch={handleSearch}
@@ -243,6 +246,8 @@ export default function App() {
                       handleMobileMenuClick={handleMobileMenuClick}
                     />
                     <SavedMovies
+                      isNothingFound={isNothingFound}
+                      setIsNothingFound={setIsNothingFound}
                       savedMovies={savedMovies}
                       setSavedMovies={setSavedMovies}
                     />
@@ -268,6 +273,12 @@ export default function App() {
                     <Profile
                       setCurrentUser={setCurrentUser}
                       setIsLoggedIn={setIsLoggedIn}
+                      setMovies={setMovies}
+                      setSavedMovies={setSavedMovies}
+                      setFoundMovies={setFoundMovies}
+                      setQuery={setQuery}
+                      setIsNothingFound={setIsNothingFound}
+                      setSearched={setSearched}
                     />
                   </>
                 }

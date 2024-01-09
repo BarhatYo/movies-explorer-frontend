@@ -3,7 +3,7 @@ import "./SavedMovies.css";
 import SearchForm from "../SearchForm/SearchForm";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 
-export default function SavedMovies({ savedMovies, setSavedMovies }) {
+export default function SavedMovies({ savedMovies, setSavedMovies, isNothingFound, setIsNothingFound }) {
   const [isShort, setIsShort] = useState(false);
   const [foundSavedMovies, setFoundSavedMovies] = useState(savedMovies);
 
@@ -28,6 +28,8 @@ export default function SavedMovies({ savedMovies, setSavedMovies }) {
         isSavedMovies={true}
         setSavedMovies={setSavedMovies}
         setFoundSavedMovies={setFoundSavedMovies}
+        isNothingFound={isNothingFound}
+        setIsNothingFound={setIsNothingFound}
       />
     </main>
   );

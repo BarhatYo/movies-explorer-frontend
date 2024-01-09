@@ -5,7 +5,7 @@ import "./Profile.css";
 import * as mainApi from "../../utils/MainApi";
 import useFormValidation from "../../hooks/useFormValidation.js";
 
-export default function Profile({ setCurrentUser, setIsLoggedIn }) {
+export default function Profile({ setCurrentUser, setIsLoggedIn, setMovies, setSavedMovies, setFoundMovies, setQuery, setIsNothingFound, setSearched }) {
   const [isEdit, setIsEdit] = useState(true);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -54,6 +54,12 @@ export default function Profile({ setCurrentUser, setIsLoggedIn }) {
   const handleExit = () => {
     localStorage.clear();
     setIsLoggedIn(false);
+    setMovies([]); 
+    setSavedMovies([]);
+    setFoundMovies([]);
+    setQuery('');
+    setIsNothingFound(false);
+    setSearched(false);
     navigate("/", { replace: true });
   };
 

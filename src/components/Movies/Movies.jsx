@@ -10,9 +10,10 @@ export default function Movies({
   setSavedMovies,
   isLoadingMovies,
   isLoadingError,
-  searched
+  searched,
+  isNothingFound,
+  setIsNothingFound,
 }) {
-
   const [isShort, setIsShort] = useState(
     localStorage.getItem("isShort") === "true" || false
   );
@@ -35,6 +36,8 @@ export default function Movies({
           searched={searched}
           setSavedMovies={setSavedMovies}
           isLoadingError={isLoadingError}
+          isNothingFound={isNothingFound}
+          setIsNothingFound={setIsNothingFound}
         />
       )}
     </main>

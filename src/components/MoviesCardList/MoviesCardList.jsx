@@ -11,17 +11,17 @@ export default function MoviesCardList({
   setSavedMovies,
   setFoundSavedMovies,
   isLoadingError,
+  isNothingFound,
+  setIsNothingFound
 }) {
   const [visibleCards, setVisibleCards] = useState(undefined);
   const [loadMore, setLoadMore] = useState(false);
-  const [cardsPerPage, setCardsPerPage] = useState(0);
-  const [isNothingFound, setIsNothingFound] = useState(false);
-
-  
+  const [cardsPerPage, setCardsPerPage] = useState(0);  
 
   const filteredMovies = isShort
     ? movies.filter((movie) => movie.duration < moviesSizes.SHORT_MOVIE_DURATION)
     : movies;
+  
 
   useEffect(() => {
     if (searched) {
