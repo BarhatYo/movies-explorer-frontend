@@ -124,6 +124,7 @@
 
 .profile__form-name-input:focus {
   outline: 1px solid #a0a0a0;
+  border-radius: 5px;
 }
 
 .profile__form-name-input-error {
@@ -167,6 +168,7 @@
 
 .profile__form-email-input:focus {
   outline: 1px solid #a0a0a0;
+  border-radius: 5px;
 }
 
 .profile__save {

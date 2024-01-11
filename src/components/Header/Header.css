@@ -59,6 +59,7 @@
   .header__overlay_active {
     visibility: visible;
     opacity: 1;
+    z-index: 1;
   }
 
   .header__menu {
@@ -73,7 +74,7 @@
     background-color: #073042;
   }
 
-  .header__menu_mobile-active {
+  .header__menu_mobile_active {
     position: fixed;
     right: 0;
     top: 0;
@@ -81,7 +82,7 @@
   }
 
   @media screen and (max-width: 576px) {
-    .header__menu_mobile-active {
+    .header__menu_mobile_active {
       width: 100%;
       gap: 0px;
     }

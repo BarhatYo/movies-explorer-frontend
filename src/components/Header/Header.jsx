@@ -12,7 +12,6 @@ export default function Header({
   handleBurgerClick,
   handleMobileMenuClick,
 }) {
-
   const navigate = useNavigate();
 
   const goToMain = () => {
@@ -28,7 +27,9 @@ export default function Header({
       }`}
     >
       <div
-        className={`header__overlay ${isMobile ? "header__overlay_active" : ''}`}
+        className={`header__overlay ${
+          isMobile ? "header__overlay_active" : ""
+        }`}
       ></div>
       <div className="header__content">
         <img
@@ -41,7 +42,7 @@ export default function Header({
           <>
             <div
               className={`header__menu ${
-                isMobile ? "header__menu_mobile-active" : ''
+                isMobile ? "header__menu_mobile_active" : ""
               }`}
             >
               <BurgerButton
@@ -52,16 +53,19 @@ export default function Header({
                 isMobile={isMobile}
                 handleMobileMenuClick={handleMobileMenuClick}
               />
-              <ProfileButton isMobile={isMobile} />
+              <ProfileButton
+                isMobile={isMobile}
+                handleMobileMenuClick={handleMobileMenuClick}
+              />
             </div>
           </>
         ) : (
           <>
             {isLoggedIn ? (
               <div
-                className={`header__menu ${
-                  isMobile ? "header__menu-mobile_active" : ''
-                } ${isLoggedIn ? 'header__menu_authorized' : ''}`}
+                className={`header__menu  ${
+                  isLoggedIn ? "header__menu_authorized" : ""
+                } ${isMobile ? "header__menu_mobile_active" : ""}`}
               >
                 <BurgerButton
                   isMobile={isMobile}
@@ -75,6 +79,7 @@ export default function Header({
                 />
                 <ProfileButton
                   isMobile={isMobile}
+                  handleMobileMenuClick={handleMobileMenuClick}
                 />
               </div>
             ) : (

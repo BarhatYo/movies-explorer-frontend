@@ -1,7 +1,7 @@
 import React from "react";
 import "./AboutMe.css";
 import SectionTitle from "../SectionTitle/SectionTitle";
-import avatar from "../../images/author.jpg";
+import avatar from "../../images/Sergey Barkhatov.jpeg";
 import linkIcon from "../../images/link-icon.svg";
 
 export default function AboutMe() {
@@ -70,7 +70,9 @@ export default function AboutMe() {
               target="_blank"
               rel="noreferrer"
             >
-              <span className="about-me__portfolio-link">Одностраничное приложение</span>
+              <span className="about-me__portfolio-link">
+                Одностраничное приложение
+              </span>
               <img
                 className="about-me__portfolio-icon"
                 src={linkIcon}

@@ -2,13 +2,14 @@ import React from "react";
 import "./ProfileButton.css";
 import { Link, useLocation } from "react-router-dom";
 
-export default function ProfileButton({ isMobile }) {
+export default function ProfileButton({ isMobile, handleMobileMenuClick }) {
   const location = useLocation();
 
   return location.pathname === "/" ? (
     <Link
       to="/profile"
       className={`profile-button profile-button_page_main ${isMobile ? "profile-button_active" : ''}`}
+      onClick={handleMobileMenuClick}
     >
       <span className="profile-button__username">Аккаунт</span>
       <div className="profile-button__icon" />
@@ -17,6 +18,7 @@ export default function ProfileButton({ isMobile }) {
     <Link
       to="/profile"
       className={`profile-button ${isMobile ? "profile-button_active" : ''}`}
+      onClick={handleMobileMenuClick}
     >
       <span className="profile-button__username">Аккаунт</span>
       <div className="profile-button__icon" />

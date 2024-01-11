@@ -43,6 +43,8 @@
 .about-me__avatar {
   width: 270px;
   height: 327px;
+  object-fit: cover;
+  border-radius: 5%;
 }
 
 .about-me__portfolio {

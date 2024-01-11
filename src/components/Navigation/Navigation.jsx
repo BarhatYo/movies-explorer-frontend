@@ -7,6 +7,7 @@ export default function Navigation({
   handleMobileMenuClick,
   isAuthorized,
 }) {
+
   return (
     <nav
       className={`navigation ${isMobile ? "navigation_active" : ''} ${
