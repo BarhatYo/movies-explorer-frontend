@@ -22,6 +22,10 @@
   cursor: pointer;
 }
 
+.register__logo:hover {
+  opacity: 0.8;
+}
+
 .register__title {
   font-size: 24px;
   font-weight: 500;
@@ -63,8 +67,25 @@
   padding-bottom: 7px;
 }
 
-.register__button {
+.register__action {
   margin-top: 127px;
+}
+
+.register__error {
+  display: block;
+  visibility: hidden;
+  margin-bottom: 20px;
+  font-size: 11px;
+  color: #FF004C;
+  text-align: center;
+}
+
+.register__error_active {
+  visibility: visible;
+}
+
+
+.register__button {
   height: 45px;
   border-radius: 3px;
   border: none;
@@ -79,6 +100,17 @@
 
 .register__button:hover {
   background-color: rgba(52, 86, 243, 0.7);
+}
+
+.register__button_disabled {
+  background-color: #F8F8F8;
+  color: #C2C2C2;
+}
+
+.register__button_disabled:hover {
+  background-color: #F8F8F8;
+  color: #C2C2C2;
+  cursor: auto;
 }
 
 .register__registred {
@@ -106,9 +138,9 @@
 }
 
 @media screen {
-  .register__button {
+  /* .register__button {
     margin-top: 127px;
-  }
+  } */
 }
 
 @media screen and (max-width: 576px) {

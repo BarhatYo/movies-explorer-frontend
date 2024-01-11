@@ -1,6 +1,21 @@
-.movies-card__image {
-  display: block;
+.movies-card__image-wrapper {
   width: 100%;
+  position: relative;
+}
+
+.movies-card__image-wrapper::before {
+  content: '';
+  padding-bottom: 56%;
+  display: block;
+}
+
+.movies-card__image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .movies-card__name {
@@ -43,12 +58,21 @@
   cursor: pointer;
 }
 
+.movies-card__like_invisible {
+  opacity: 0;
+}
+
 .movies-card__like:hover {
   opacity: 0.7;
 }
 
 @media screen and (max-width: 992px) {
+
   .movies-card__name {
     width: 300px;
+  }
+
+  .movies-card__like_invisible {
+    opacity: 1;
   }
 }

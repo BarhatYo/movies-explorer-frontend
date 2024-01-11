@@ -59,12 +59,29 @@
   font-weight: 400;
   color: #ff3055;
   line-height: 1.21;
-  padding-top: 5px;
-  padding-bottom: 7px;
+  padding: 0 0 9px;
+  height: 12px;
+  
+}
+
+.login__action {
+  margin-top: 200px;
+}
+
+.login__error {
+  display: block;
+  visibility: hidden;
+  margin-bottom: 20px;
+  font-size: 11px;
+  color: #FF004C;
+  text-align: center;
+}
+
+.login__error_active {
+  visibility: visible;
 }
 
 .login__button {
-  margin-top: 200px;
   height: 45px;
   border-radius: 3px;
   border: none;
@@ -79,6 +96,17 @@
 
 .login__button:hover {
   background-color: rgba(52, 86, 243, 0.8);
+}
+
+.login__button_disabled {
+  background-color: #F8F8F8;
+  color: #C2C2C2;
+}
+
+.login__button_disabled:hover {
+  background-color: #F8F8F8;
+  color: #C2C2C2;
+  cursor: auto;
 }
 
 .login__not-registred {
@@ -118,6 +146,10 @@
   .login__logo {
     margin: auto;
     padding-top: 56px;
+  }
+
+  .login__logo:hover {
+    opacity: 0.8;
   }
 
   .login__hello {
